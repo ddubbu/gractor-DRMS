@@ -3,11 +3,11 @@
     <section id="input-form">
       <div>
         <label>이름</label>
-        <input name="name" v-model="name"/>
+        <input name="name" :value="name" @input="inputHandler"/>
       </div>
       <div>
         <label>내용</label>
-        <input name="message" v-model="message"/>
+        <input name="message" :value="message" @input="inputHandler"/>
       </div>
       <button @click="submitHandler">저장</button>
     </section>
@@ -25,40 +25,61 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      input: {
-        name: '',
-        message: ''
-      },
-      chats: [
-        {
-          name: '김선미',
-          message: '안녕하세요'
-        },
-        {
-          name: '이현규',
-          message: '감사합니다'
-        }
-      ]
-    }
-  },
-  methods: {
-    getHandler() {
-      
-    },
-    submitHandler(){},
-    modifyHandler(){},
-    deleteHandler(){}
-  },
+  const axios = require('axios');  //! 왜 이렇게 되지....
 
-}
+  export default {
+    data() {
+      return {
+        input: {
+          name: '',
+          message: ''
+        },
+        chats: [
+          {
+            name: '김선미',
+            message: '안녕하세요'
+          },
+          {
+            name: '이현규',
+            message: '감사합니다'
+          }
+        ]
+      }
+    },
+    methods: {
+      inputHandler(e){
+        this.input[e.target.name] = e.target.value;
+      },
+      async submitHandler() {
+        console.log("input", this.input.name, this.input.message)
+        axios.post('/api/users', {
+          data: {
+            ...this.input
+          }
+        })
+        .then(({data})=>{
+          console.log("res", data)
+        })
+
+      },
+      modifyHandler(){},
+      deleteHandler(){},
+      getChats(){
+        axios.get('/api/users')
+        .then(({ data })=>{
+          console.log("res", data)
+        })
+
+      }
+    },
+
+
+  }
 </script>
 
 <style>
   #main-content{
-    width: 50%;
+    width: 30%;
     /* display: flex; */
     /* flex-direction: column;
     align-content: center; */
