@@ -16,17 +16,19 @@ class UserService extends ElasticsearchService {
     this.router = router
   }
 
-  async createUser() {
-    const body = req.body
+  async createUser(req, res) {
+    console.log("axios post")
+    const body = req.body;
+    console.log("req.body", body)
 
-    this.elastic.index({
-      index: UserService.index,
-      body,
-    })
+    // this.elastic.index({
+    //   index: UserService.index,
+    //   body,
+    // })
   }
 
   async searchUser(req, res) {
-    console.log(UserService)
+    console.log("axios get")
     const elasticQuery = {
       match_all: {},
     }
@@ -50,7 +52,6 @@ class UserService extends ElasticsearchService {
         query: elasticQuery,
       },
     })
-
     res.send({ rows, total })
   }
 }
