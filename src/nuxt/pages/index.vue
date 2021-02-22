@@ -45,9 +45,9 @@ export default {
     };
   },
 
-  mounted() {
-    console.info(this.$axios) //! module import 완료 
-  },
+  // mounted() {
+  //   console.info(this.$axios.$get) //! module import 완료 
+  // },
   methods: {
     inputHandler(e) {
       this.input[e.target.name] = e.target.value;
@@ -66,11 +66,11 @@ export default {
     },
     modifyHandler() {},
     deleteHandler() {},
-    getChats() {
-      axios.get("/api/users").then(({ data }) => {
-        console.log("res", data);
-      });
-    },
+    // getChats() {
+    // this.$axios.$get("/api/users").then(data=> {
+    //   console.log("res", data);
+    // });
+    // },
   },
 };
 </script>
