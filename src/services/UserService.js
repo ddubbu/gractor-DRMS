@@ -26,9 +26,6 @@ class UserService extends ElasticsearchService {
     const {
       body: {
         _id,
-        // _shards: {
-        //   successful : successful
-        // }
       },
       statusCode
     } = await this.elastic.index({
@@ -41,10 +38,9 @@ class UserService extends ElasticsearchService {
   }
 
   async searchUser(req, res) {
-    console.log("axios get")
+    console.log("GET axios")
 
     const { size } = req.query;
-    // console.log("size params", params)
     const elasticQuery = {
       match_all: {},
     }
@@ -74,7 +70,19 @@ class UserService extends ElasticsearchService {
   }
 
   async updateUser(req, res){
-
+    console.log("UPDATE axios");
+    const {id, payload} = req.body;
+    const result = await this.elastic.update({
+      index: UserService.index,
+      id,
+      body: {
+        doc: { //! 이거 들어가야한다니...
+          ...payload
+        }
+      }
+    })
+    console.log("UPDATE response", result);
+    res.send(result);
   }
 
   async deleteUser(req, res){
@@ -85,9 +93,8 @@ class UserService extends ElasticsearchService {
       id,
       // refresh:true
     })
-    // console.log("delete result", result);
 
-    res.send(result)
+    res.send(result);
   }
 
 }

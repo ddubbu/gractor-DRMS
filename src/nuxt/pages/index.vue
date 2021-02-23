@@ -5,11 +5,11 @@
         <div>수정하기</div>
         <div>
           <label>이름</label>
-          <input name="name" :value="input.name" @input="inputHandler" />
+          <input name="name" :value="input_modal.name" @input="inputHandler($event, 'input_modal')" />
         </div>
         <div>
           <label>내용</label>
-          <input name="message" :value="input.message" @input="inputHandler" />
+          <input name="message" :value="input_modal.message" @input="inputHandler($event, 'input_modal')" />
         </div>
         <button @click="modifyHandler">저장</button>
         <button @click="toggleModal">취소</button>
@@ -20,11 +20,11 @@
       <section id="input-form">
         <div>
           <label>이름</label>
-          <input name="name" :value="input.name" @input="inputHandler" />
+          <input name="name" :value="input.name" @input="inputHandler($event, 'input')" />
         </div>
         <div>
           <label>내용</label>
-          <input name="message" :value="input.message" @input="inputHandler" />
+          <input name="message" :value="input.message" @input="inputHandler($event, 'input')" />
         </div>
         <button @click="submitHandler">저장</button>
         <div>Total: {{total}}</div>
@@ -52,6 +52,10 @@ export default {
         name: "",
         message: "",
       },
+      input_modal: {
+        name: "",
+        message: "",
+      },
       chats: [ // FAKE DATA
         // {
         //   name: "김선미",
@@ -62,6 +66,10 @@ export default {
         //   message: "감사합니다",
         // },
       ],
+      event: {
+        list_id: "",
+        db_id: ""
+      }
     };
   },
 
@@ -70,8 +78,8 @@ export default {
 
   },
   methods: {
-    inputHandler(e) {
-      this.input[e.target.name] = e.target.value;
+    inputHandler(e, object) {
+      this[object][e.target.name] = e.target.value;
     },
     async submitHandler() {
       console.log("input", this.input.name, this.input.message);
@@ -80,7 +88,6 @@ export default {
         this.input
       )
       .then( data=> {
-        console.log("res", data);
         // chat 추가
         this.chats.push({
           id: data.id,
@@ -93,56 +100,65 @@ export default {
         this.input.message = "";
       });
     },
-    modifyHandler(e, db_id, list_id){
-      console.log("this.input", this.input);
+    modifyHandler(e){
+      const {db_id, list_id} = this.event;
+      console.log("update", db_id, list_id);
+
+      // db 업데이트 
+      this.$axios.$put('/api/users', {
+        id: db_id,
+        payload: this.input_modal
+      })
+
+      // state 업데이트
+      this.chats = {
+        ...this.chats,
+        [list_id] : this.input_modal
+      }
+
+      this.toggleModal();
     },
     toggleModal(e, db_id, list_id) {
-      console.log("수정")
       const $modal = document.querySelector('#modify-modal-wrapper');
       $modal.style.display = $modal.style.display === "block" ? 'none' : "block";
 
       const $inputs = document.querySelectorAll('#modify-modal input');
-      if(list_id){ //열때는 아이디 넘김. 
-        console.log("this.chats[list_id]", this.chats[list_id])
-        $inputs[0].value = this.chats[list_id].name || "";
-        $inputs[1].value = this.chats[list_id].message || "";
+      if(list_id !== undefined){ //열때는 아이디 넘김. 
+        this.input_modal = {
+          name : this.chats[list_id].name,
+          message : this.chats[list_id].message  
+        }
+
+        this.event = {
+          db_id,
+          list_id
+        }
       }
 
-      console.log("$name", $inputs[0]);
     },
     deleteHandler(e, id) {
-      console.log("id", id)
-
       this.$axios
       .$delete("api/users", { params : { id } })
       .then(res=>{
         console.log("DELETE response", res);
-              // chats 갱신 
-        console.log("after delte------------------")
+
+        // chats 갱신 
+        console.log("after delete------------------")
         // this.getChats();
-        setTimeout(this.getChats, 600);
+        setTimeout(this.getChats, 1000);
       })
 
     },
     async getChats() {
-      
       await this.$axios.$get(`/api/users`,{ params: { size: 100 }}).then(({rows, total})=> {
         console.log("total rows :", total)
-
-        console.log("[BEFORE]", this.chats);
         this.chats = [... rows.map(row=>{ 
-          // if(!row._source.password) {
-            return {
-              id: row._id, 
-              ...row._source
-            }
-          // } else{
-          //   return undefined; //없으면 출력안되니깐
-          // }
+          return {
+            id: row._id, 
+            ...row._source
+          }
         })]
         this.total = this.chats.length;
-
-        console.log("[AFTER]", this.chats);
       });
     },
   },
@@ -151,24 +167,12 @@ export default {
       return this.chats.length;
     }
   },
-  // watch: {
-  //   chats:{
-  //     deep: true,
-  //     handler(){
-  //       console.log("is change?");
-  //       console.log("this.chats", this.chats)
-  //     }
-  //   }
-  // }
 };
 </script>
 
 <style>
   #main-content {
     width: 30%;
-    /* display: flex; */
-    /* flex-direction: column;
-      align-content: center; */
     margin: 0 auto;
     background: rgb(255, 210, 210);
     padding: 2em;
