@@ -69,7 +69,7 @@ export default {
       event: {
         list_id: "",
         db_id: ""
-      }
+      },
     };
   },
 
@@ -140,12 +140,9 @@ export default {
       this.$axios
       .$delete("api/users", { params : { id } })
       .then(res=>{
-        console.log("DELETE response", res);
-
         // chats 갱신 
-        console.log("after delete------------------")
-        // this.getChats();
-        setTimeout(this.getChats, 1000);
+        this.getChats();
+        // setTimeout(this.getChats, 1000);
       })
 
     },
@@ -158,7 +155,7 @@ export default {
             ...row._source
           }
         })]
-        this.total = this.chats.length;
+        // this.total = this.chats.length;
       });
     },
   },

@@ -91,7 +91,7 @@ class UserService extends ElasticsearchService {
     const result = await this.elastic.delete({
       index: UserService.index,
       id,
-      // refresh:true
+      refresh:'wait_for'
     })
 
     res.send(result);
