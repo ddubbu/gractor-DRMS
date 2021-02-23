@@ -12,7 +12,9 @@ class UserService extends ElasticsearchService {
     // Controller, Service 동시에
     router.get('/api/users', (req, res, next) => this.searchUser(req, res).catch(next))
     router.post('/api/users', (req, res, next) => this.createUser(req, res).catch(next))
-
+    router.put('/api/users', (req, res, next) => this.updateUser(req, res).catch(next))
+    router.delete('/api/users', (req, res, next) => this.updateUser(req, res).catch(next))
+    
     this.router = router
   }
 
@@ -21,14 +23,28 @@ class UserService extends ElasticsearchService {
     const body = req.body;
     console.log("req.body", body)
 
-    // this.elastic.index({
-    //   index: UserService.index,
-    //   body,
-    // })
+    const {
+      body: {
+        _id,
+        // _shards: {
+        //   successful : successful
+        // }
+      },
+      statusCode
+    } = await this.elastic.index({
+      index: UserService.index,
+      body,
+    })
+
+    res.send( {id: _id, statusCode: statusCode} )
+
   }
 
   async searchUser(req, res) {
     console.log("axios get")
+
+    const { size } = req.query;
+    // console.log("size params", params)
     const elasticQuery = {
       match_all: {},
     }
@@ -39,6 +55,7 @@ class UserService extends ElasticsearchService {
       },
     } = await this.elastic.search({
       index: UserService.index,
+      size: size ? size : 20, // default : 10
       body: {
         query: elasticQuery,
       },
@@ -52,8 +69,18 @@ class UserService extends ElasticsearchService {
         query: elasticQuery,
       },
     })
+
     res.send({ rows, total })
   }
+
+  async updateUser(req, res){
+
+  }
+
+  async deleteUser(req, res){
+
+  }
+
 }
 
 module.exports = UserService
