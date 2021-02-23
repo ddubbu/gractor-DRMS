@@ -13,7 +13,7 @@ class UserService extends ElasticsearchService {
     router.get('/api/users', (req, res, next) => this.searchUser(req, res).catch(next))
     router.post('/api/users', (req, res, next) => this.createUser(req, res).catch(next))
     router.put('/api/users', (req, res, next) => this.updateUser(req, res).catch(next))
-    router.delete('/api/users', (req, res, next) => this.updateUser(req, res).catch(next))
+    router.delete('/api/users', (req, res, next) => this.deleteUser(req, res).catch(next))
     
     this.router = router
   }
@@ -78,7 +78,16 @@ class UserService extends ElasticsearchService {
   }
 
   async deleteUser(req, res){
+    console.log("DELTE axios")
+    const { id } = req.query;
+    const result = await this.elastic.delete({
+      index: UserService.index,
+      id,
+      // refresh:true
+    })
+    // console.log("delete result", result);
 
+    res.send(result)
   }
 
 }
