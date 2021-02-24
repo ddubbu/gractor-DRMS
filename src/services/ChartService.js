@@ -15,12 +15,10 @@ class UserService extends ElasticsearchService {
     this.router = router
   }
 
-
-
   async searchChart(req, res) {
-    console.log("GET axios")
+    console.log('GET axios')
 
-    const { size } = req.query;
+    const { size } = req.query
     const elasticQuery = {
       match_all: {},
     }
@@ -28,7 +26,7 @@ class UserService extends ElasticsearchService {
     const {
       body: {
         hits: { hits: rows },
-        aggregations
+        aggregations,
       },
     } = await this.elastic.search({
       index: UserService.index,
@@ -37,11 +35,11 @@ class UserService extends ElasticsearchService {
       body: {
         query: elasticQuery,
         aggs: {
-          "시설군 요약": {
+          '시설군 요약': {
             terms: {
-              field: "시설군"
-            }
-          }
+              field: '시설군',
+            },
+          },
         },
       },
     })
@@ -57,9 +55,6 @@ class UserService extends ElasticsearchService {
 
     res.send({ rows, total, aggregations })
   }
-
-
-
 }
 
 module.exports = UserService

@@ -39,9 +39,9 @@ async function main() {
       host: 'localhost',
       port: 8000,
       paths: {
-        loaders: path.join(__dirname, 'loaders'), 
-        services: path.join(__dirname, 'services'), // Server 
-        middlewares: path.join(__dirname, 'middlewares'), 
+        loaders: path.join(__dirname, 'loaders'),
+        services: path.join(__dirname, 'services'), // Server
+        middlewares: path.join(__dirname, 'middlewares'),
       },
       dbs: [client],
     })

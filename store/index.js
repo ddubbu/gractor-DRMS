@@ -1,9 +1,7 @@
-export const state = () => ({
-
-})
+export const state = () => ({})
 
 export const mutations = {
-  createUser: function(){
+  createUser: function () {
     console.log(this.$axios)
-  }
+  },
 }

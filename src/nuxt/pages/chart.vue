@@ -1,22 +1,21 @@
 <template>
-  <div id="main" style="width: 600px; height: 400px"></div>
+  <!-- <div id="main" style="width: 600px; height: 400px"></div> -->
   <echarts :options="options" />
 </template>
 
 <script>
-import ECharts from "vue-echarts/components/ECharts.vue";
-
+// import * as echarts from "echarts";
 // 만약 다른 기능 쓰고 싶으면
-import "echarts/lib/chart/line";
-import "echarts/lib/component/tooltip";
-import "echarts/lib/component/legend";
+// import "echarts/lib/chart/line";
+// import "echarts/lib/component/tooltip";
+// import "echarts/lib/component/legend";
 
 export default {
-  components: { ECharts },
   data() {
     return {
       list: [], //! -> pagination
-      facility_count: [], //! pie graph
+      facility_count: [], //! pie graph,
+      options: {},
     };
   },
   mounted() {
@@ -27,48 +26,43 @@ export default {
 
     function callback() {
       // based on prepared DOM, initialize echarts instance
-      var myChart = echarts.init(document.getElementById("main"));
+      // var myChart = echarts.init(document.getElementById("main"));
       // specify chart configuration item and data
-      var option = {
+      var options = {
         title: {
-          text: "양천구 시설 현황 ",
-          textStyle: {
-            // color: "blue",
-          },
-          // padding: 50,
-          // textAlign: "center",
+          text: "양천구",
+          subtext: "다중이용시설",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
         },
         dataset: {
           source: this.facility_count,
         },
-        // tooltip: {},
-        // legend: {
-        //   data: ["Sales"],
-        // },
-        // xAxis: {
-        //   data: ["shirt", "cardign", "chiffon shirt", "pants", "heels", "socks"],
-        // },
-        // yAxis: {},
-        // series: [
-        //   {
-        //     name: "Sales",
-        //     type: "bar",
-        //     data: [5, 20, 36, 10, 10, 20],
-        //   },
-        // ],
-        label: {
-          show: true,
+        legend: {
+          orient: "vertical",
+          left: "left",
         },
         series: [
           {
+            name: "시설군",
             type: "pie",
-            // radius: '20%',
-            // center: ['50%', '50%']
+            radius: "50%",
+
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
           },
         ],
       };
       // use configuration item and data specified to show chart
-      myChart.setOption(option);
+      // myChart.setOption(options);
+      this.options = options;
     }
   },
   methods: {
