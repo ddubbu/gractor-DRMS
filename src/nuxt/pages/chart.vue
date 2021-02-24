@@ -4,32 +4,35 @@
 
 <script>
 import * as echarts from "echarts";
-// import { init } from "echarts";
+// import { init } from "echarts"; <-- 이렇게 꺼내거나
 export default {
   mounted() {
     // based on prepared DOM, initialize echarts instance
-    var myChart = echarts.init(document.getElementById("main"));
+    const $dom = document.getElementById("main");
+    var myChart = echarts.init($dom);
 
     // specify chart configuration item and data
-    var option = {
-      title: {
-        text: "ECharts entry example",
-      },
+    const option = {
+      legend: {},
       tooltip: {},
-      legend: {
-        data: ["Sales"],
+      dataset: {
+        // Provide data.
+        source: [
+          ["product", "2015", "2016", "2017"],
+          ["Matcha Latte", 43.3, 85.8, 93.7],
+          ["Milk Tea", 83.1, 73.4, 55.1],
+          ["Cheese Cocoa", 86.4, 65.2, 82.5],
+          ["Walnut Brownie", 72.4, 53.9, 39.1],
+        ],
       },
-      xAxis: {
-        data: ["shirt", "cardign", "chiffon shirt", "pants", "heels", "socks"],
-      },
+      // Declare X axis, which is a category axis, mapping
+      // to the first column by default.
+      xAxis: { type: "category" },
+      // Declare Y axis, which is a value axis.
       yAxis: {},
-      series: [
-        {
-          name: "Sales",
-          type: "bar",
-          data: [5, 20, 36, 10, 10, 20],
-        },
-      ],
+      // Declare several series, each of them mapped to a
+      // column of the dataset by default.
+      series: [{ type: "bar", center: ['25%', '30%'] }, { type: "scatter" }, { type: "pie" }],
     };
 
     // use configuration item and data specified to show chart
