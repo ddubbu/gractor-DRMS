@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2>양천구 시설목록</h2>
+    <h2 style="text-align: center">양천구 시설목록</h2>
     <DataGrid
-      style="height: 80%"
+      style="height: 80%; width: 60%; margin: 0 auto"
       :pagination="true"
       :data="data"
       :total="total"

@@ -1,6 +1,7 @@
 <template>
   <div>
     <echarts :options="options" />
+    <!-- <echarts :options="options2" /> -->
   </div>
 </template>
 
@@ -11,6 +12,7 @@ export default {
       list: [], //! -> pagination
       facility_count: [], //! pie graph,
       options: {},
+      options2: {},
     };
   },
   mounted() {
@@ -61,6 +63,9 @@ export default {
         ],
       };
       this.options = option;
+
+      this.options2 = option;
+      // this.
     }
   },
   methods: {
