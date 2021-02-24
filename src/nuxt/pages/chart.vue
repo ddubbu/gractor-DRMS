@@ -4,19 +4,19 @@
 </template>
 
 <script>
-import ECharts from 'vue-echarts/components/ECharts.vue'
+import ECharts from "vue-echarts/components/ECharts.vue";
 
-// 만약 다른 기능 쓰고 싶으면 
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/legend'
+// 만약 다른 기능 쓰고 싶으면
+import "echarts/lib/chart/line";
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/legend";
 
 export default {
-  components: {ECharts},
+  components: { ECharts },
   data() {
     return {
-      list: [],  //! -> pagination 
-      facility_count : []  //! pie graph
+      list: [], //! -> pagination
+      facility_count: [], //! pie graph
     };
   },
   mounted() {
@@ -25,7 +25,7 @@ export default {
 
     // console.log("this.facility_count", this.facility_count)
 
-    function callback(){
+    function callback() {
       // based on prepared DOM, initialize echarts instance
       var myChart = echarts.init(document.getElementById("main"));
       // specify chart configuration item and data
@@ -34,13 +34,12 @@ export default {
           text: "양천구 시설 현황 ",
           textStyle: {
             // color: "blue",
-            
           },
           // padding: 50,
           // textAlign: "center",
         },
         dataset: {
-          source: this.facility_count
+          source: this.facility_count,
         },
         // tooltip: {},
         // legend: {
@@ -57,16 +56,16 @@ export default {
         //     data: [5, 20, 36, 10, 10, 20],
         //   },
         // ],
-        label:{
-          show: true
+        label: {
+          show: true,
         },
         series: [
           {
             type: "pie",
-                  // radius: '20%',
+            // radius: '20%',
             // center: ['50%', '50%']
-          }
-        ]
+          },
+        ],
       };
       // use configuration item and data specified to show chart
       myChart.setOption(option);
@@ -75,37 +74,30 @@ export default {
   methods: {
     async getAirTest(callback) {
       await this.$axios.get("/api/chart").then(({ data }) => {
-        const { 
-          rows, 
-          aggregations:{
-          "시설군 요약" : {
-              buckets: facility_count
-            }
+        const {
+          rows,
+          aggregations: {
+            "시설군 요약": { buckets: facility_count },
           },
-          total
-        } = data
+          total,
+        } = data;
         console.log("rows", rows);
         console.log("facility_count", facility_count);
         console.log("total", total);
 
         // data update
-        const facility_count_list = facility_count.map(ele=>{
-          return [ele.key, ele.doc_count]
-        })
+        const facility_count_list = facility_count.map((ele) => {
+          return [ele.key, ele.doc_count];
+        });
 
-        this.facility_count = [
-          ['product', 'count'],
-          ...facility_count_list
-        ];
+        this.facility_count = [["product", "count"], ...facility_count_list];
         console.log("this.facility_count", this.facility_count);
 
         callback();
-
       });
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
