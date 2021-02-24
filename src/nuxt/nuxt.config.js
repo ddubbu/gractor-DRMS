@@ -6,4 +6,7 @@ module.exports = {
     // proxy: true
     baseURL: 'http://localhost:8000'
   },
+  build: {
+    transpile: ['vue-echarts', 'resize-detector']
+  }
 }

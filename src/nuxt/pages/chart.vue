@@ -1,11 +1,18 @@
 <template>
   <div id="main" style="width: 600px; height: 400px"></div>
+  <echarts :options="options" />
 </template>
 
 <script>
-import * as echarts from "echarts";
-// import { init } from "echarts";
+import ECharts from 'vue-echarts/components/ECharts.vue'
+
+// 만약 다른 기능 쓰고 싶으면 
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/legend'
+
 export default {
+  components: {ECharts},
   data() {
     return {
       list: [],  //! -> pagination 
@@ -30,7 +37,7 @@ export default {
             
           },
           // padding: 50,
-          textAlign: "center",
+          // textAlign: "center",
         },
         dataset: {
           source: this.facility_count
