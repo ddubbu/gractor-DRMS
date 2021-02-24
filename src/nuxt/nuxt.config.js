@@ -5,5 +5,5 @@ module.exports = {
   axios: {
     // proxy: true
     baseURL: 'http://localhost:8000'
-  }
+  },
 }

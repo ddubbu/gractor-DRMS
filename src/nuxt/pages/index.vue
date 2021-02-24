@@ -40,6 +40,7 @@
           </div>
         </article>
       </section>
+      <NuxtLink to="/chart"><button>chart</button></NuxtLink>
     </div>
   </div>
 </template>
