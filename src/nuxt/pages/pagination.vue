@@ -1,76 +1,68 @@
 <template>
   <div>
-    <h2>Pagination</h2>
-    <div style="margin-bottom: 10px">
-      <Label for="c1">Pager on: </Label>
-      <ComboBox
-        inputId="c1"
-        style="width: 120px"
-        :data="pageOptions"
-        v-model="pagePosition"
-        :editable="false"
-        :panelStyle="{ height: 'auto' }"
-      >
-      </ComboBox>
-    </div>
+    <h2>양천구 시설목록</h2>
     <DataGrid
-      style="height: 250px"
+      style="height: 80%"
       :pagination="true"
       :data="data"
       :total="total"
       :pageSize="pageSize"
       :pagePosition="pagePosition"
     >
-      <GridColumn field="inv" title="Inv No"></GridColumn>
-      <GridColumn field="name" title="Name"></GridColumn>
-      <GridColumn field="amount" title="Amount" align="right"></GridColumn>
-      <GridColumn field="price" title="Price" align="right"></GridColumn>
-      <GridColumn field="cost" title="Cost" align="right"></GridColumn>
-      <GridColumn field="note" title="Note"></GridColumn>
+      <GridColumn
+        field="연번"
+        title="연번"
+        width="40px"
+        align="center"
+      ></GridColumn>
+      <GridColumn
+        field="시설군"
+        title="시설군"
+        width="100px"
+        halign="center"
+      ></GridColumn>
+      <GridColumn
+        field="시설명"
+        title="시설명"
+        width="150px"
+        halign="center"
+      ></GridColumn>
+      <GridColumn
+        field="전화번호"
+        title="전화번호"
+        width="100px"
+        halign="center"
+      ></GridColumn>
+      <GridColumn field="소재지" title="소재지" halign="center"></GridColumn>
     </DataGrid>
   </div>
 </template>
 
 <script>
 export default {
-  components: {
-    Label,
-    // ComboBox,
-    // DataGrid,
-    // GridColumn
-  },
   data() {
     return {
-      total: 10000,
-      pageSize: 20,
+      total: 0,
       data: [],
+      pageSize: 20,
       pagePosition: 'bottom',
-      pageOptions: [
-        { value: 'bottom', text: 'Bottom' },
-        { value: 'top', text: 'Top' },
-        { value: 'both', text: 'Both' },
-      ],
     };
   },
   created() {
-    this.data = this.getData(this.total);
+    this.getAirTest();
   },
   methods: {
-    getData(total) {
-      let data = [];
-      for (let i = 1; i <= total; i++) {
-        let amount = Math.floor(Math.random() * 1000);
-        let price = Math.floor(Math.random() * 1000);
-        data.push({
-          inv: 'Inv No ' + i,
-          name: 'Name ' + i,
-          amount: amount,
-          price: price,
-          cost: amount * price,
-          note: 'Note ' + i,
+    async getAirTest() {
+      await this.$axios.get('/api/chart').then(({ data }) => {
+        const { rows, total } = data;
+
+        this.data = rows.map(({ _source }, idx) => {
+          return _source;
         });
-      }
-      return data;
+        this.total = total;
+
+        console.log('this.data', this.data);
+      });
     },
   },
 };
