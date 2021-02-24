@@ -7,10 +7,15 @@ module.exports = {
     baseURL: 'http://localhost:8000',
   },
   plugins: [
-    { src: '~plugins/vue-echarts', ssr: false }
+    { src: '~plugins/vue-echarts', ssr: false },
+    { src: '~plugins/vx-easyui', ssr: false }
+
   ],
   build: {
-    transpile: ['vue-echarts', 'resize-detector'],
+    // transpile: ['vue-echarts', 'resize-detector'],
+    // transpile: ['vx-easyui', 'resize-detector'],
+    extend(config) {
+      config.resolve.alias['vue'] = 'vue/dist/vue.common'
+    }
   },
-  
 }
