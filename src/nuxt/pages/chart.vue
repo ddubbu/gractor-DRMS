@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div id="main" style="width: 600px; height: 400px"></div>
     <echarts :options="options" />
   </div>
 </template>
@@ -25,46 +24,43 @@ export default {
       // var myChart = echarts.init(document.getElementById("main"));
       // specify chart configuration item and data
       var option = {
+        tooltip: {
+          trigger: 'item',
+        },
         title: {
           text: '양천구 시설 현황 ',
           textStyle: {
             // color: "blue",
           },
+          left: 'center',
           // padding: 50,
-          // textAlign: "center",
+          // textAlign: 'right',
         },
         dataset: {
           source: this.facility_count,
         },
-        // tooltip: {},
-        // legend: {
-        //   data: ["Sales"],
-        // },
-        // xAxis: {
-        //   data: ["shirt", "cardign", "chiffon shirt", "pants", "heels", "socks"],
-        // },
-        // yAxis: {},
-        // series: [
-        //   {
-        //     name: "Sales",
-        //     type: "bar",
-        //     data: [5, 20, 36, 10, 10, 20],
-        //   },
-        // ],
-        label: {
+        legend: {
           show: true,
+          // position: 'center',
+          icon: 'rect',
+          top: 'bottom',
         },
         series: [
           {
+            label: {
+              show: false,
+            },
+            labelLine: {
+              show: false,
+            },
             type: 'pie',
             // radius: '20%',
-            // center: ['50%', '50%']
+            radius: ['40%', '70%'],
+            center: ['50%', '50%'],
           },
         ],
       };
-      // use configuration item and data specified to show chart
       this.options = option;
-      // myChart.setOption(option);
     }
   },
   methods: {
