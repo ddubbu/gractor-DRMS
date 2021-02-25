@@ -25,10 +25,10 @@ class UserService extends ElasticsearchService {
       //  select * from 'index table' where 시군명="" and 업종명(종목명)= "일반휴게음식-일반한식"
       "bool": {
         "must": [
-          { "match": { "시군명": "군포시" } },
+          { "match": { "시군명": region } },
           {
             "wildcard": {
-              "업종명(종목명)": `${category}*`
+              "업종명(종목명)": `*${category}*`
             }
           }
         ]
