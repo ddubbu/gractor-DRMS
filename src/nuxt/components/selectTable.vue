@@ -2,7 +2,13 @@
   <div>
     <section :class="'table ' + table_class" :id="table_class">
       <ul>
-        <li v-for="item of list[table_class]" :key="item">{{ item }}</li>
+        <li
+          v-for="item of list[table_class]"
+          :key="item"
+          @click="clickHandler($event, item)"
+        >
+          {{ item }}
+        </li>
       </ul>
     </section>
   </div>
@@ -10,9 +16,14 @@
 
 <script>
 export default {
-  props: ['table_class'],
+  props: ['table_class', 'selectData'],
   data() {
     return {
+      $prevTarget: null,
+      isClick: {
+        region: false,
+        category: false,
+      },
       list: {
         region: [
           '가평군',
@@ -72,12 +83,47 @@ export default {
       },
     };
   },
+  methods: {
+    clickHandler(e, item) {
+      const $target = e.target;
+      const type = this.$props.table_class;
+
+      // 1. region 선택 안함.
+      if (!this.isClick[type]) {
+        $target.classList.add('click');
+        this.isClick[type] = true;
+        $target.style.background = 'red';
+        this.$prevTarget = $target;
+
+        // state 변경하기
+        this.$props.selectData[type] = item;
+      }
+      // 2. region 이미 선택했고 다시 눌렀으면 삭제
+      else if (this.isClick[type] && $target.classList.contains('click')) {
+        $target.classList.remove('click');
+        this.isClick[type] = false;
+        $target.style.background = 'white';
+        this.$prevTarget = null;
+
+        // state 변경하기
+        this.$props.selectData[type] = undefined;
+      }
+      // 3. 이미 뭐 눌러져있는데 다른거 누르면 그걸로 바뀜.
+      else if (this.isClick[type] && !$target.classList.contains('click')) {
+        $target.style.background = 'red';
+        this.$prevTarget.style.background = 'white';
+        this.$prevTarget = $target;
+
+        // state 변경하기
+        this.$props.selectData[type] = item;
+      }
+    },
+  },
 };
 </script>
 
 <style>
 .table {
-  /* margin: 0 auto; */
   text-align: center;
 }
 
@@ -86,27 +132,30 @@ export default {
   display: flex;
   width: 910px;
   flex-wrap: wrap;
-  /* text-align: center; */
   align-items: center;
   margin: 0 auto;
   padding: 0;
-  /* justify-content: center; */
 }
 
 .table > ul > li {
   display: inline-block;
   padding-top: 20px;
-  /* line-height: 50%; */
-  /* inline-flex; */
   width: 180px;
   font-size: 13px;
   color: #000;
   height: 55px;
   line-height: 19px;
   border: 1px solid #ddd;
-  /* border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd; */
   text-align: center;
   background: #fff;
+  user-select: none;
+}
+
+.table > ul > li:hover {
+  background: rgba(190, 189, 189, 0.363);
+}
+
+.click {
+  background: red;
 }
 </style>

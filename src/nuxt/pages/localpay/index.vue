@@ -16,10 +16,14 @@
     </section>
     <section id="select-table">
       <h4>검색하려는 지역을 선택해 주세요.</h4>
-      <selectTable table_class="region" />
+      <selectTable table_class="region" :selectData="selectData" />
       <h4>업종을 선택해 주세요.</h4>
-      <selectTable table_class="category" />
+      <selectTable table_class="category" :selectData="selectData" />
+
+      <button id="btn-search" @click="searchHandler">검색</button>
     </section>
+
+    <section id="grid-content">grid 결과------</section>
   </div>
 </template>
 
@@ -28,6 +32,23 @@ import selectTable from '../../components/selectTable.vue';
 export default {
   components: {
     selectTable,
+  },
+  data() {
+    return {
+      selectData: {
+        region: undefined,
+        category: undefined,
+      },
+    };
+  },
+  methods: {
+    searchHandler() {
+      console.log('search', this.selectData.region, this.selectData.category);
+
+      // 한 페이지에 모두 렌더링
+      const $target = document.querySelector('#select-table');
+      $target.classList.add('hide');
+    },
   },
 };
 </script>
@@ -39,13 +60,29 @@ export default {
 }
 
 #header :last-child {
-  /* #header p:nth-child(2) { */
   margin-top: 9px;
-  /* color: red; */
   font-size: 10px;
 }
 
 #select-table {
   text-align: center;
+}
+
+#btn-search {
+  outline: none;
+  width: 100px;
+  height: 56px;
+  background: #292929;
+  color: #fff;
+  line-height: 56px;
+  font-weight: 800;
+  display: inline-block;
+  text-align: center;
+  margin: 20px 0 0 7px;
+  border-radius: 3px;
+}
+
+.hide {
+  display: none;
 }
 </style>
