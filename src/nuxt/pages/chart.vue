@@ -1,21 +1,18 @@
 <template>
-  <!-- <div id="main" style="width: 600px; height: 400px"></div> -->
-  <echarts :options="options" />
+  <div>
+    <echarts :options="options" />
+    <!-- <echarts :options="options2" /> -->
+  </div>
 </template>
 
 <script>
-// import * as echarts from "echarts";
-// 만약 다른 기능 쓰고 싶으면
-// import "echarts/lib/chart/line";
-// import "echarts/lib/component/tooltip";
-// import "echarts/lib/component/legend";
-
 export default {
   data() {
     return {
       list: [], //! -> pagination
       facility_count: [], //! pie graph,
       options: {},
+      options2: {},
     };
   },
   mounted() {
@@ -28,64 +25,70 @@ export default {
       // based on prepared DOM, initialize echarts instance
       // var myChart = echarts.init(document.getElementById("main"));
       // specify chart configuration item and data
-      var options = {
-        title: {
-          text: "양천구",
-          subtext: "다중이용시설",
-          left: "center",
-        },
+      var option = {
         tooltip: {
-          trigger: "item",
+          trigger: 'item',
+        },
+        title: {
+          text: '양천구 시설 현황 ',
+          textStyle: {
+            // color: "blue",
+          },
+          left: 'center',
+          // padding: 50,
+          // textAlign: 'right',
         },
         dataset: {
           source: this.facility_count,
         },
         legend: {
-          orient: "vertical",
-          left: "left",
+          show: true,
+          // position: 'center',
+          icon: 'rect',
+          top: 'bottom',
         },
         series: [
           {
-            name: "시설군",
-            type: "pie",
-            radius: "50%",
-
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
+            label: {
+              show: false,
             },
+            labelLine: {
+              show: false,
+            },
+            type: 'pie',
+            // radius: '20%',
+            radius: ['40%', '70%'],
+            center: ['50%', '50%'],
           },
         ],
       };
-      // use configuration item and data specified to show chart
-      // myChart.setOption(options);
-      this.options = options;
+      this.options = option;
+
+      this.options2 = option;
+      // this.
     }
   },
   methods: {
     async getAirTest(callback) {
-      await this.$axios.get("/api/chart").then(({ data }) => {
+      await this.$axios.get('/api/chart').then(({ data }) => {
         const {
           rows,
           aggregations: {
-            "시설군 요약": { buckets: facility_count },
+            '시설군 요약': { buckets: facility_count },
           },
           total,
         } = data;
-        console.log("rows", rows);
-        console.log("facility_count", facility_count);
-        console.log("total", total);
+        console.log('rows', rows);
+        console.log('facility_count', facility_count);
+        console.log('total', total);
 
         // data update
         const facility_count_list = facility_count.map((ele) => {
           return [ele.key, ele.doc_count];
         });
 
-        this.facility_count = [["product", "count"], ...facility_count_list];
-        console.log("this.facility_count", this.facility_count);
+        this.facility_count = [['product', 'count'], ...facility_count_list];
+        console.log('this.facility_count', this.facility_count);
 
         callback();
       });

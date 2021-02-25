@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import ECharts from 'vue-echarts'
+import Vue from 'vue';
+import ECharts from 'vue-echarts';
 
-import 'echarts'
+import 'echarts';
 
-Vue.component('Echarts', ECharts)
+Vue.component('echarts', ECharts);
