@@ -8,11 +8,12 @@
       :total="total"
       :pageSize="pageSize"
       :pagePosition="pagePosition"
+      :filterable="true"
     >
       <GridColumn
         field="연번"
         title="연번"
-        width="40px"
+        width="50px"
         align="center"
       ></GridColumn>
       <GridColumn
@@ -26,6 +27,7 @@
         title="시설명"
         width="150px"
         halign="center"
+        sortable="true"
       ></GridColumn>
       <GridColumn
         field="전화번호"
