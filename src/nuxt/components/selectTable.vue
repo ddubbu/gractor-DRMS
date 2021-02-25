@@ -1,8 +1,8 @@
 <template>
   <div>
-    <section id="select-region">
+    <section :class="'table ' + table_class" :id="table_class">
       <ul>
-        <li v-for="region of regions" :key="region">{{ region }}</li>
+        <li v-for="item of list[table_class]" :key="item">{{ item }}</li>
       </ul>
     </section>
   </div>
@@ -10,53 +10,78 @@
 
 <script>
 export default {
+  props: ['table_class'],
   data() {
     return {
-      regions: [
-        '가평군',
-        '고양시',
-        '과천시',
-        '광명시',
-        '광주시',
-        '구리시',
-        '군포시',
-        '김포시',
-        '남양주시',
-        '동두천시',
-        '부천시',
-        '성남시',
-        '수원시',
-        '시흥시',
-        '안산시',
-        '안성시',
-        '안양시',
-        '양주시',
-        '양평군',
-        '여주시',
-        '연천군',
-        '오산시',
-        '용인시',
-        '의왕시',
-        '의정부시',
-        '이천시',
-        '파주시',
-        '평택시',
-        '포천시',
-        '하남시',
-        '화성시',
-      ],
+      list: {
+        region: [
+          '가평군',
+          '고양시',
+          '과천시',
+          '광명시',
+          '광주시',
+          '구리시',
+          '군포시',
+          '김포시',
+          '남양주시',
+          '동두천시',
+          '부천시',
+          '성남시',
+          '수원시',
+          '시흥시',
+          '안산시',
+          '안성시',
+          '안양시',
+          '양주시',
+          '양평군',
+          '여주시',
+          '연천군',
+          '오산시',
+          '용인시',
+          '의왕시',
+          '의정부시',
+          '이천시',
+          '파주시',
+          '평택시',
+          '포천시',
+          '하남시',
+          '화성시',
+        ],
+        category: [
+          '숙박',
+          '여행',
+          '레저',
+          '문화/취미',
+          '의류/잡화/생활가전',
+          '주유소',
+          '유통',
+          '서적/문구',
+          '학원',
+          '사무통신',
+          '자동차판매',
+          '서비스',
+          '보험',
+          '병원',
+          '약국',
+          '기타 의료기관',
+          '미용/안경/보건위생',
+          '일반/휴게음식',
+          '제과/음료식품',
+          '기타',
+        ],
+      },
     };
   },
 };
 </script>
 
 <style>
-#select-region {
+.table {
   /* margin: 0 auto; */
   text-align: center;
 }
 
-#select-region ul {
+.table ul {
   list-style: none;
   display: flex;
   width: 910px;
@@ -68,7 +93,7 @@ export default {
   /* justify-content: center; */
 }
 
-#select-region > ul > li {
+.table > ul > li {
   display: inline-block;
   padding-top: 20px;
   /* line-height: 50%; */

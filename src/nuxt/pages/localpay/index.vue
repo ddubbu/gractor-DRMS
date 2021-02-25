@@ -14,9 +14,11 @@
         있으니 매장에 사용 가능 여부를 확인하기 바랍니다.
       </p>
     </section>
-    <section id="select-region">
+    <section id="select-table">
       <h4>검색하려는 지역을 선택해 주세요.</h4>
-      <selectTable />
+      <selectTable table_class="region" />
+      <h4>업종을 선택해 주세요.</h4>
+      <selectTable table_class="category" />
     </section>
   </div>
 </template>
@@ -41,5 +43,9 @@ export default {
   margin-top: 9px;
   /* color: red; */
   font-size: 10px;
+}
+
+#select-table {
+  text-align: center;
 }
 </style>
