@@ -39,7 +39,9 @@ class UserService extends ElasticsearchService {
 
     const { size } = req.query
     const elasticQuery = {
-      match_all: {},
+      match_all: {
+        
+      },
     }
 
     const {
