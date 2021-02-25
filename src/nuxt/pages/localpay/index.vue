@@ -1,37 +1,47 @@
 <template>
   <div>
-    <section id="header">
-      <img src="../../assets/search_img.png" />
-      <h1>경기지역화폐 결제 매장 검색</h1>
-      <p>
-        경기지역화폐는 소상공인 경쟁력 강화를 위해 백화점, 대형마트, 일부
-        제외업종 및
-        <br />
-        일정 기준 매출액 이상의 매장에서 사용이 제한됩니다.
-      </p>
-      <p>
-        * 가맹점 폐업 또는 업종변경, 가맹점 정보변경 등으로 현재 정보와 다를 수
-        있으니 매장에 사용 가능 여부를 확인하기 바랍니다.
-      </p>
-    </section>
-    <section id="select-table">
-      <h4>검색하려는 지역을 선택해 주세요.</h4>
-      <selectTable table_class="region" :selectData="selectData" />
-      <h4>업종을 선택해 주세요.</h4>
-      <selectTable table_class="category" :selectData="selectData" />
+    <client-only>
+      <section id="header">
+        <img src="../../assets/search_img.png" />
+        <h1>경기지역화폐 결제 매장 검색</h1>
+        <p>
+          경기지역화폐는 소상공인 경쟁력 강화를 위해 백화점, 대형마트, 일부
+          제외업종 및
+          <br />
+          일정 기준 매출액 이상의 매장에서 사용이 제한됩니다.
+        </p>
+        <p>
+          * 가맹점 폐업 또는 업종변경, 가맹점 정보변경 등으로 현재 정보와 다를
+          수 있으니 매장에 사용 가능 여부를 확인하기 바랍니다.
+        </p>
+      </section>
+      <section id="select-table" class="show">
+        <h4>검색하려는 지역을 선택해 주세요.</h4>
+        <selectTable table_class="region" :selectData="selectData" />
+        <h4>업종을 선택해 주세요.</h4>
+        <selectTable table_class="category" :selectData="selectData" />
 
-      <button id="btn-search" @click="searchHandler">검색</button>
-    </section>
+        <button id="btn-search" @click="searchHandler">검색</button>
+      </section>
 
-    <section id="grid-content">grid 결과------</section>
+      <section id="grid-content" class="hide">
+        <grid
+          :selectData="selectData"
+          :onPageChange="onPageChange"
+          :toggleDisplay="toggleDisplay"
+        />
+      </section>
+    </client-only>
   </div>
 </template>
 
 <script>
 import selectTable from '../../components/selectTable.vue';
+import grid from '../../components/grid.vue';
 export default {
   components: {
     selectTable,
+    grid,
   },
   data() {
     return {
@@ -44,10 +54,29 @@ export default {
   methods: {
     searchHandler() {
       console.log('search', this.selectData.region, this.selectData.category);
-
+      this.toggleDisplay();
+    },
+    toggleDisplay() {
       // 한 페이지에 모두 렌더링
-      const $target = document.querySelector('#select-table');
-      $target.classList.add('hide');
+      const $select_table = document.querySelector('#select-table');
+      const $grid_content = document.querySelector('#grid-content');
+
+      if ($select_table.classList.contains('hide')) {
+        $select_table.classList.remove('hide');
+        $select_table.classList.add('show');
+
+        $grid_content.classList.remove('show');
+        $grid_content.classList.add('hide');
+      } else {
+        $select_table.classList.remove('show');
+        $select_table.classList.add('hide');
+
+        $grid_content.classList.remove('hide');
+        $grid_content.classList.add('show');
+      }
+    },
+    onPageChange(e) {
+      console.log('page chagne');
     },
   },
 };
@@ -84,5 +113,9 @@ export default {
 
 .hide {
   display: none;
+}
+
+.show {
+  display: block;
 }
 </style>

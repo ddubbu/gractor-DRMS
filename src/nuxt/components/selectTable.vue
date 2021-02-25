@@ -92,7 +92,7 @@ export default {
       if (!this.isClick[type]) {
         $target.classList.add('click');
         this.isClick[type] = true;
-        $target.style.background = 'red';
+        $target.style.background = 'gray';
         this.$prevTarget = $target;
 
         // state 변경하기
@@ -110,7 +110,7 @@ export default {
       }
       // 3. 이미 뭐 눌러져있는데 다른거 누르면 그걸로 바뀜.
       else if (this.isClick[type] && !$target.classList.contains('click')) {
-        $target.style.background = 'red';
+        $target.style.background = 'gray';
         this.$prevTarget.style.background = 'white';
         this.$prevTarget = $target;
 
