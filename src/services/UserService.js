@@ -37,7 +37,8 @@ class UserService extends ElasticsearchService {
   async searchUser(req, res) {
     console.log('GET axios')
 
-    const { size } = req.query
+    const { size } = req.query;
+    console.log("req.params", req.params)
     const elasticQuery = {
       match_all: {
         
@@ -88,6 +89,7 @@ class UserService extends ElasticsearchService {
   async deleteUser(req, res) {
     console.log('DELTE axios')
     const { id } = req.query
+    console.log("delete id", id)
     const result = await this.elastic.delete({
       index: UserService.index,
       id,
