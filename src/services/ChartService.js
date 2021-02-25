@@ -18,7 +18,7 @@ class UserService extends ElasticsearchService {
   async searchChart(req, res) {
     console.log('GET axios')
 
-    const { size } = req.query
+    const { size, from } = req.query
     const elasticQuery = {
       match_all: {},
     }
@@ -30,6 +30,7 @@ class UserService extends ElasticsearchService {
       },
     } = await this.elastic.search({
       index: UserService.index,
+      // from: from,
       size: size ? size : 200, // default : 10
 
       body: {

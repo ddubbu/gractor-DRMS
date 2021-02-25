@@ -29,6 +29,7 @@
           :selectData="selectData"
           :onPageChange="onPageChange"
           :toggleDisplay="toggleDisplay"
+          :data="data"
         />
       </section>
     </client-only>
@@ -49,11 +50,13 @@ export default {
         region: undefined,
         category: undefined,
       },
+      data: [],
     };
   },
   methods: {
     searchHandler() {
       console.log('search', this.selectData.region, this.selectData.category);
+      this.getLocalPay();
       this.toggleDisplay();
     },
     toggleDisplay() {
@@ -77,6 +80,55 @@ export default {
     },
     onPageChange(e) {
       console.log('page chagne');
+    },
+    async getLocalPay() {
+      console.log('getLocalPay');
+      console.log('this.selectData', this.selectData);
+      await this.$axios
+        .$get('/api/pay', {
+          params: {
+            region: this.selectData.region,
+            category: this.selectData.category,
+          },
+        })
+        .then((res) => {
+          const {
+            rows,
+            // aggregations: {
+            //   '시군명 요약': { buckets: local_pay_region },
+            //   '업종별 요약': { buckets: local_pay_category },
+            // },
+            total,
+          } = res;
+          // // console.log('pay rows', aggregations);
+          console.log('rows', rows);
+          console.log('total', total);
+
+          this.data = rows.map(({ _source }) => {
+            return _source;
+          });
+          // // const local_pay_rows = local_pay;
+          // // console.log('local_pay_rows', local_pay_rows);
+          // const local_pay_list_region = local_pay_region.map((ele) => {
+          //   return [ele.key, ele.doc_count];
+          // });
+          // const local_pay_list_category = local_pay_category.map((ele) => {
+          //   return [ele.key, ele.doc_count];
+          // });
+          // this.local_pay_list_region = [
+          //   ['시군명', 'count'],
+          //   ...local_pay_list_region,
+          // ];
+          // this.local_pay_list_category = [
+          //   ['업종별', 'count'],
+          //   ...local_pay_list_category,
+          // ];
+          // // console.log('local_pay_list', this.local_pay_list);
+          // // callback();
+        })
+        .catch((e) => {
+          console.log('ERROR', e);
+        });
     },
   },
 };
