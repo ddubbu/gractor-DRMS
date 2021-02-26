@@ -15,23 +15,16 @@
           수 있으니 매장에 사용 가능 여부를 확인하기 바랍니다.
         </p>
       </section>
-      <section id="select-table" class="show">
+      <section id="select-table">
         <h4>검색하려는 지역을 선택해 주세요.</h4>
         <selectTable table_class="region" :selectData="selectData" />
         <h4>업종을 선택해 주세요.</h4>
         <selectTable table_class="category" :selectData="selectData" />
-
-        <button id="btn-search" @click="searchHandler">검색</button>
-      </section>
-
-      <section id="grid-content" class="hide">
-        <grid
-          :selectData="selectData"
-          :getLocalPay="getLocalPay"
-          :toggleDisplay="toggleDisplay"
-          :data="data"
-          :total="total"
-        />
+        <NuxtLink
+          :to="`/localpay/list?region=${selectData.region}&category=${selectData.category}`"
+        >
+          <button id="btn-search">검색</button>
+        </NuxtLink>
       </section>
     </client-only>
   </div>
@@ -51,70 +44,7 @@ export default {
         region: undefined,
         category: undefined,
       },
-      data: [],
-      total: 0,
     };
-  },
-  methods: {
-    searchHandler() {
-      console.log('search', this.selectData.region, this.selectData.category);
-      this.getLocalPay();
-      this.toggleDisplay();
-    },
-    toggleDisplay() {
-      // 한 페이지에 모두 렌더링
-      const $select_table = document.querySelector('#select-table');
-      const $grid_content = document.querySelector('#grid-content');
-
-      if ($select_table.classList.contains('hide')) {
-        $select_table.classList.remove('hide');
-        $select_table.classList.add('show');
-
-        $grid_content.classList.remove('show');
-        $grid_content.classList.add('hide');
-      } else {
-        $select_table.classList.remove('show');
-        $select_table.classList.add('hide');
-
-        $grid_content.classList.remove('hide');
-        $grid_content.classList.add('show');
-      }
-    },
-    async getLocalPay(pageNumber = 1, pageSize = 20) {
-      console.log('getLocalPay', pageNumber, pageSize);
-      console.log('this.selectData', this.selectData);
-      await this.$axios
-        .$get('/api/pay', {
-          params: {
-            region: this.selectData.region,
-            category: this.selectData.category,
-            from: (pageNumber - 1) * pageSize,
-            size: pageSize,
-          },
-        })
-        .then((res) => {
-          const {
-            rows,
-            // aggregations: {
-            //   '시군명 요약': { buckets: local_pay_region },
-            //   '업종별 요약': { buckets: local_pay_category },
-            // },
-            total,
-          } = res;
-          // // console.log('pay rows', aggregations);
-          console.log('rows', rows);
-          console.log('total', total);
-
-          this.data = rows.map(({ _source }) => {
-            return _source;
-          });
-
-          this.total = total;
-        })
-        .catch((e) => {
-          console.log('ERROR', e);
-        });
-    },
   },
 };
 </script>
@@ -146,13 +76,5 @@ export default {
   text-align: center;
   margin: 20px 0 0 7px;
   border-radius: 3px;
-}
-
-.hide {
-  display: none;
-}
-
-.show {
-  display: block;
 }
 </style>

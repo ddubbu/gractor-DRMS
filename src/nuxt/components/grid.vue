@@ -4,11 +4,13 @@
       <h1>{{ selectData.region + ' ' + selectData.category }}</h1>
       <section id="table-top-etc">
         <div>
-          <button class="btn-home" @click="toggleDisplay">Home</button>
+          <NuxtLink to="/localpay">
+            <button class="btn-home">Home</button>
+          </NuxtLink>
         </div>
         <div>
-          <sapn style="margin-right: 10px">결제 가능 매장</sapn>
-          <sapn id="table-total-count">검색결과 {{ total }}개</sapn>
+          <span style="margin-right: 10px">결제 가능 매장</span>
+          <span id="table-total-count">검색결과 {{ total }}개</span>
         </div>
       </section>
     </section>
@@ -69,7 +71,11 @@
 
 <script>
 export default {
-  props: ['selectData', 'toggleDisplay', 'data', 'total', 'getLocalPay'],
+  props: ['selectData'],
+  mounted() {
+    console.log('gird page', this.$props.selectData);
+    this.getLocalPay();
+  },
   data() {
     return {
       total: 0,
@@ -77,20 +83,43 @@ export default {
       pageSize: 20,
       pagePosition: 'bottom',
       isLoading: false,
-
+      data: [],
       fields: ['NO', '시군명', '업종명(종목명)', '상호명', '소재지도로명주소'],
-      // widths: ['100px', '100px', '100px', '100px', '100px'],
     };
   },
   methods: {
     loadPage(pageNumber, pageSize) {
       this.loading = true;
-      this.$props.getLocalPay(pageNumber, pageSize);
-      this.loading = false;
+      this.getLocalPay(pageNumber, pageSize);
     },
     onPageChange(e) {
       console.log('[here] page chagne', e);
       this.loadPage(e.pageNumber, e.pageSize);
+    },
+    async getLocalPay(pageNumber = 1, pageSize = 20) {
+      await this.$axios
+        .$get('/api/pay', {
+          params: {
+            region: this.$props.selectData.region,
+            category: this.$props.selectData.category,
+            from: (pageNumber - 1) * pageSize,
+            size: pageSize,
+          },
+        })
+        .then((res) => {
+          const { rows, total } = res;
+
+          this.data = rows.map(({ _source }) => {
+            return _source;
+          });
+
+          this.total = total;
+
+          this.loading = false;
+        })
+        .catch((e) => {
+          console.log('ERROR', e);
+        });
     },
   },
 };
@@ -110,6 +139,7 @@ export default {
   /* padding-left: 50px; */
   /* text-align: center; */
   margin-bottom: 5px;
+  margin-top: 100px;
 }
 
 #table-total-count {

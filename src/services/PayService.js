@@ -19,7 +19,6 @@ class UserService extends ElasticsearchService {
 
     console.log("req.query", req.query)
     const { region, category, from, size } = req.query
-
     const elasticQuery = {
 
       //  select * from 'index table' where 시군명="" and 업종명(종목명)= "일반휴게음식-일반한식"
@@ -43,22 +42,10 @@ class UserService extends ElasticsearchService {
       },
     } = await this.elastic.search({
       index: UserService.index,
-      from: from ? from : 0, //!
-      size: size ? size : 100, //20, // default : 10
+      from: from, //? from : 0, //!
+      size: size, //? size : 100, //20, // default : 10
       body: {
         query: elasticQuery,
-        // aggs: {
-        //   '시군명 요약': {
-        //     terms: {
-        //       field: '시군명',
-        //     },
-        //   },
-        //   '업종별 요약': {
-        //     terms: {
-        //       field: '업종명(종목명)',
-        //     },
-        //   },
-        // },
 
       },
     })
