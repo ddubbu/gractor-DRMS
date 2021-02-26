@@ -27,9 +27,10 @@
       <section id="grid-content" class="hide">
         <grid
           :selectData="selectData"
-          :onPageChange="onPageChange"
+          :getLocalPay="getLocalPay"
           :toggleDisplay="toggleDisplay"
           :data="data"
+          :total="total"
         />
       </section>
     </client-only>
@@ -51,6 +52,7 @@ export default {
         category: undefined,
       },
       data: [],
+      total: 0,
     };
   },
   methods: {
@@ -78,17 +80,16 @@ export default {
         $grid_content.classList.add('show');
       }
     },
-    onPageChange(e) {
-      console.log('page chagne');
-    },
-    async getLocalPay() {
-      console.log('getLocalPay');
+    async getLocalPay(pageNumber = 1, pageSize = 20) {
+      console.log('getLocalPay', pageNumber, pageSize);
       console.log('this.selectData', this.selectData);
       await this.$axios
         .$get('/api/pay', {
           params: {
             region: this.selectData.region,
             category: this.selectData.category,
+            from: (pageNumber - 1) * pageSize,
+            size: pageSize,
           },
         })
         .then((res) => {
@@ -107,24 +108,8 @@ export default {
           this.data = rows.map(({ _source }) => {
             return _source;
           });
-          // // const local_pay_rows = local_pay;
-          // // console.log('local_pay_rows', local_pay_rows);
-          // const local_pay_list_region = local_pay_region.map((ele) => {
-          //   return [ele.key, ele.doc_count];
-          // });
-          // const local_pay_list_category = local_pay_category.map((ele) => {
-          //   return [ele.key, ele.doc_count];
-          // });
-          // this.local_pay_list_region = [
-          //   ['시군명', 'count'],
-          //   ...local_pay_list_region,
-          // ];
-          // this.local_pay_list_category = [
-          //   ['업종별', 'count'],
-          //   ...local_pay_list_category,
-          // ];
-          // // console.log('local_pay_list', this.local_pay_list);
-          // // callback();
+
+          this.total = total;
         })
         .catch((e) => {
           console.log('ERROR', e);

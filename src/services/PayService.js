@@ -18,7 +18,7 @@ class UserService extends ElasticsearchService {
   async searchPay(req, res) {
 
     console.log("req.query", req.query)
-    const { size, region, category } = req.query
+    const { region, category, from, size } = req.query
 
     const elasticQuery = {
 
@@ -43,7 +43,7 @@ class UserService extends ElasticsearchService {
       },
     } = await this.elastic.search({
       index: UserService.index,
-      from: 0, //!
+      from: from ? from : 0, //!
       size: size ? size : 100, //20, // default : 10
       body: {
         query: elasticQuery,

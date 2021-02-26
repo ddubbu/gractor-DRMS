@@ -8,12 +8,12 @@
         </div>
         <div>
           <sapn style="margin-right: 10px">결제 가능 매장</sapn>
-          <sapn id="table-total-count">검색결과 {{ 57 }}개</sapn>
+          <sapn id="table-total-count">검색결과 {{ total }}개</sapn>
         </div>
       </section>
     </section>
     <DataGrid
-      style="height: 80%; width: 800px; margin: 0 auto"
+      style="height: 80%; width: 1000px; margin: 0 auto"
       :pagination="true"
       :data="data"
       :total="total"
@@ -21,6 +21,8 @@
       :pagePosition="pagePosition"
       :filterable="true"
       @pageChange="onPageChange"
+      :lazy="true"
+      :loading="isLoading"
     >
       <!-- 저장하면 다시 사라짐 ㅜㅜ -->
       <!-- <GridColumn
@@ -54,7 +56,7 @@
         field="상호명"
         title="상호명"
         halign="center"
-        width="200px"
+        width="300px"
       ></GridColumn>
       <GridColumn
         field="소재지도로명주소"
@@ -67,22 +69,30 @@
 
 <script>
 export default {
-  props: ['selectData', 'onPageChange', 'toggleDisplay', 'data'],
-  methods: {
-    name() {},
-  },
-
+  props: ['selectData', 'toggleDisplay', 'data', 'total', 'getLocalPay'],
   data() {
     return {
       total: 0,
+      pageNumber: 1,
       pageSize: 20,
       pagePosition: 'bottom',
+      isLoading: false,
 
       fields: ['NO', '시군명', '업종명(종목명)', '상호명', '소재지도로명주소'],
-      widths: ['100px', '100px', '100px', '100px', '100px'],
+      // widths: ['100px', '100px', '100px', '100px', '100px'],
     };
   },
-  methods: {},
+  methods: {
+    loadPage(pageNumber, pageSize) {
+      this.loading = true;
+      this.$props.getLocalPay(pageNumber, pageSize);
+      this.loading = false;
+    },
+    onPageChange(e) {
+      console.log('[here] page chagne', e);
+      this.loadPage(e.pageNumber, e.pageSize);
+    },
+  },
 };
 </script>
 
@@ -90,7 +100,7 @@ export default {
 #table-container {
   /* padding: 50px; */
   /* text-align: left; */
-  width: 800px;
+  width: 1000px;
   margin: 0 auto;
 }
 
