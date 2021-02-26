@@ -18,4 +18,12 @@ module.exports = {
       config.resolve.alias['vue'] = 'vue/dist/vue.common'
     }
   },
+  buildModules: [
+    // Simple usage
+    '@nuxtjs/vuetify',
+
+    // With options
+    ['@nuxtjs/vuetify', { /* module options */ }]
+  ]
+
 }

@@ -19,11 +19,14 @@
     "@syncfusion/ej2-vue-charts": "^18.4.44",
     "echarts": "^4.9.0",
     "vue-echarts": "^4.1.0",
+    "vuetify": "^2.4.5",
     "vx-easyui": "^1.2.18"
   },
   "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.3",
     "@vue/composition-api": "^1.0.0-rc.2",
     "babel-eslint": "^10.1.0",
+    "deepmerge": "^4.2.2",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-nuxt": "^2.0.0",
@@ -33,6 +36,8 @@
     "lint-staged": "^10.5.4",
     "nodemon": "^2.0.7",
     "nuxt": "^2.15.1",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "sass": "^1.32.8",
+    "sass-loader": "^11.0.1"
   }
 }
