@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon --inspect --ignore src/nuxt src/index",
     "start": "node src/index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -16,13 +17,14 @@
     "@luasenvy/rapidfire": "^0.1.16",
     "@nuxtjs/axios": "^5.13.1",
     "@syncfusion/ej2-vue-charts": "^18.4.44",
-    "echarts": "^5.0.2",
-    "vue-echarts": "^6.0.0-alpha.5"
+    "echarts": "^4.9.0",
+    "vue-echarts": "^4.1.0",
+    "vx-easyui": "^1.2.18"
   },
   "devDependencies": {
     "@vue/composition-api": "^1.0.0-rc.2",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.3.1",

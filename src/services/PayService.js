@@ -1,7 +1,7 @@
 const ElasticsearchService = require('../interfaces/ElasticsearchService')
 
 class UserService extends ElasticsearchService {
-  static index = ['airtest']
+  static index = ['local-pay-1', 'local-pay-2']
 
   /**
    * [constructor description]
@@ -10,38 +10,43 @@ class UserService extends ElasticsearchService {
   constructor({ router }) {
     super()
     // Controller, Service 동시에
-    router.get('/api/chart', (req, res, next) => this.searchChart(req, res).catch(next))
+    router.get('/api/pay', (req, res, next) => this.searchPay(req, res).catch(next))
 
     this.router = router
   }
 
-  async searchChart(req, res) {
-    console.log('GET axios')
+  async searchPay(req, res) {
 
-    const { size, from } = req.query
+    console.log("req.query", req.query)
+    const { region, category, from, size } = req.query
     const elasticQuery = {
-      match_all: {},
+
+      //  select * from 'index table' where 시군명="" and 업종명(종목명)= "일반휴게음식-일반한식"
+      "bool": {
+        "must": [
+          { "match": { "시군명": region } },
+          {
+            "wildcard": {
+              "업종명(종목명)": `*${category}*`
+            }
+          }
+        ]
+      }
+
     }
 
     const {
       body: {
         hits: { hits: rows },
-        aggregations,
+        aggregations
       },
     } = await this.elastic.search({
       index: UserService.index,
-      // from: from,
-      size: size ? size : 200, // default : 10
-
+      from: from, //? from : 0, //!
+      size: size, //? size : 100, //20, // default : 10
       body: {
         query: elasticQuery,
-        aggs: {
-          '시설군 요약': {
-            terms: {
-              field: '시설군',
-            },
-          },
-        },
+
       },
     })
 
@@ -56,6 +61,7 @@ class UserService extends ElasticsearchService {
 
     res.send({ rows, total, aggregations })
   }
+
 }
 
 module.exports = UserService
