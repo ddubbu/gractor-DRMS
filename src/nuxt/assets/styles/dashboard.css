@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+}
+
+#body-content {
+  padding: 20px 100px 0 100px;
+}
+
+#title {
+  display: flex;
+  align-items: center;
+}
+
+#situation.real {
+  padding: 0.3em 1em;
+  background: rgb(254, 52, 102) !important;
+  color: #fff;
+  border-radius: 5px;
+
+  margin-right: 5px;
+}
+
+#description {
+  display: flex;
+  align-items: center;
+}
+
+#state-response-levels span {
+  font-size: 11px;
+  border: solid 1px #ccc;
+  padding: 4px;
+  /* background: #fafafa; */
+  margin-right: 5px;
+  /* border-radius: 5px; */
+}
+
+#state-response-levels span:first-child {
+  margin-left: 20px;
+}
+
+.active {
+  color: white;
+  background: #ed242d;
+}
+
+#swiper-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.swiper-slide {
+  margin-right: 20px;
+
+  padding: 1em 0.5em 0 !important;
+  color: #2a3f54;
+  width: 245px;
+  margin-bottom: 1em;
+  font-size: 1.4em;
+  box-shadow: 3px 3px 5px rgb(0 0 0 / 10%);
+  border: solid 1px #ccc;
+
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.swiper-slide.report {
+  background: #2a3f54;
+  color: #fff;
+}
+
+.slide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /* color: #1abb9c;
+    padding-left: .4em;
+    font-size: 0.9em; */
+}
+
+.slide-header .unit {
+  font-size: 13px;
+}
+
+.slide-count {
+  padding-right: 0.2em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  font-size: 2em;
+  font-weight: 800;
+  /* letter-spacing: -0.1em; */
+  text-align: right;
+  line-height: 1;
+  height: 1.5em;
+}
+
+.slide-count-unit {
+  font-size: 0.5em;
+}
+
+/*//! main content ======================== */
+/* :root {
+  --process-table-width: 25%;
+} */
+#main-content {
+  display: flex;
+  /* width: 100%; */
+}
+#report-wrapper {
+  width: 30%;
+  padding: 12px;
+  list-style-type: disc;
+}
+
+#report-wrapper li span {
+  cursor: pointer;
+}
+
+#process-wrapper {
+  width: 70%;
+}
+#main-content > section,
+.process-table {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+li.task,
+.response-level {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+li.task div {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* //! process diagram */
+#process-table-list {
+  display: flex;
+}
+
+.process-table {
+  width: var(--process-table-width);
+  /* width: 25%; */
+}
+
+.response-level {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.task-list {
+  overflow-y: auto;
+  height: 600px;
+}
+
+li.task {
+  height: 76px;
+  display: flex;
+  list-style: none;
+}
+
+li.task div {
+  /* 말줄임표 (...) */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+}
+
+button.btn-task-state {
+  width: 10%;
+  min-width: 20px;
+  max-width: 35px;
+  height: 100%;
+
+  outline: none;
+  border: none;
+
+  margin-right: 5px;
+}
+
+#task-state-list {
+  padding: 10px;
+  text-align: right;
+}
+
+.task-state-list-icon {
+  background-color: #009ccc;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+button.btn-task-state.done,
+.task-state-list-icon.done {
+  background: #1abb9c;
+}
+
+button.btn-task-state.todo,
+.task-state-list-icon.todo {
+  background: #009ccc;
+}
+
+button.btn-task-state.doing,
+.task-state-list-icon.doing {
+  background: #ffd700;
+}
+
+button.btn-task-state.stop,
+.task-state-list-icon.stop {
+  background: #ff9900;
+}
+
+button.btn-task-state.delay,
+.task-state-list-icon.delay {
+  background: #cc293d;
+}

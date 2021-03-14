@@ -1,0 +1,191 @@
+@hostname =  http://192.168.1.241
+##http://localhost
+@port = 9200
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@index = dashboard
+@dashboard_id = 8YQY8XcBc6Fh9j6VB6Z8
+#! 전체 찾기 ====================================
+
+###
+GET {{host}}/{{index}}
+
+###
+GET {{host}}/{{index}}/_search
+
+#! 삭제 =========================================
+###
+DELETE {{host}}/{{index}}
+
+###
+POST {{host}}/{{index}}/_delete_by_query
+{
+  "query":{
+    "match": {
+      "_id": "HYoz4ncBqut2V0wOGelD"
+    }
+  }
+}
+
+###
+
+#! index field 생성 =============================
+###
+PUT {{host}}/{{index}}
+content-Type: {{contentType}}
+
+{
+  "settings": {
+    "number_of_shards" : 5,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "title" : {"type" : "text"},
+      "situation_type" : {"type" : "keyword"},
+      "disaster_control_number" : {"type" : "integer"},
+      "cur_response_level" : { "type" : "integer" },
+      "start_date" : { "type"  : "date"},
+      "members" : { "type" : "object" },
+      "task_states" : { "type" : "object" }
+    }
+  }
+}
+
+###
+
+#! doc 추가 ======================================
+POST {{host}}/{{index}}/_doc
+content-Type: {{contentType}}
+
+{
+  "title" : "[서울]코로나 19 유행",
+  "situation_type" : "real",
+  "disaster_control_number" : 1,
+  "cur_response_level" : 2,
+  "start_date" : "2015-01-01T12:10:30Z",
+  "members" : {
+    "manager_id" : ["100"],
+    "others_id" : ["TYTa9XcBc6Fh9j6Vpaij", "FIND_ME"]
+  },
+  "task_states" : {
+    "1-1": {"state" : "done"},
+    "2-1":{"state" : "done"},
+    "2-2" : {"state" : "done"},
+    "3-2" : {"state" : "done"},
+    "20-1" : {"state" : "done"},
+    "47-1" : {"state" : "doing"},
+    "4-1" : {"state" : "doing"},
+    "5-1" : {"state" : "done"},
+    "5-2" : {"state" : "done"},
+    "7-5" : {"state" : "todo"},
+    "7-6" : {"state" : "done"},
+    "4-2" : {"state" : "done"},
+    "6-1" : {"state" : "todo"},
+    "49-1" : {"state" : "doing"},
+    "47-2" : {"state" : "doing"},
+    "49-2" : {"state" : "doing"},
+    "26-2" : {"state" : "doing"},
+    "26-3" : {"state" : "doing"},
+    "34-1" : {"state" : "doing"},
+    "34-17" : {"state" : "doing"},
+    "10-4" : {"state" : "todo"},
+    "12-2" : {"state" : "todo"},
+    "38-1" : {"state" : "todo"},
+    "40-5" : {"state" : "todo"},
+    "40-10" : {"state" : "stop"},
+    "40-11" : {"state" : "delay"},
+    "50-1" : {"state" : "todo"},
+    "48-1" : {"state" : "todo"},
+    "13-3" : {"state" : "todo"},
+    "13-4" : {"state" : "todo"},
+    "13-5" : {"state" : "done"},
+    "14-2" : {"state" : "doing"},
+    "14-4" : {"state" : "doing"},
+    "21-8" : {"state" : "todo"},
+    "41-2" : {"state" : "todo"},
+    "47-4" : {"state" : "todo"},
+    "26-7" : {"state" : "todo"}
+  }
+}
+
+
+#! doc 수정 (객체 일부 가능) =======================================
+###
+POST {{host}}/{{index}}/_update/{{dashboard_id}}
+{
+  "doc" :{
+    "members": {
+      "others_id" : ["TYTa9XcBc6Fh9j6Vpaij", "T4RN9ncBc6Fh9j6Vnqhl", "FIND_ME"]
+    }
+  }
+}
+
+#! multi search ============================
+###
+GET {{host}}/_msearch
+{ "index": "disaster" }
+{ "query": { "match": { "control_number": 1 } } }
+{ "index" : "dashboard" }
+{ "query": { "match": { "_id": "bTzq63cBSBqlwJRG-rfu" } } }
+{ "index": "report" }
+{ "query": { "match": { "dashboard_id": "bTzq63cBSBqlwJRG-rfu" } } }
+
+#! 집계 msearch
+###
+GET {{host}}/_msearch
+{ "index" :"report" }
+{"query": { "match": { "dashboard_id": "bTzq63cBSBqlwJRG-rfu" } }, "aggs": {"group_by_state": {"terms": {"field": "category"}}}}
+
+
+#! 집계 ordering : asc, desc
+GET report/_search
+{"query": { "match": { "dashboard_id": "bTzq63cBSBqlwJRG-rfu" } }, 
+"aggs": {"group_by_category": {"terms": {
+    "field": "category",
+    "order" : {"condition" : "asc"}  
+  },
+  "aggs": {
+    "condition":{
+      "min" : {
+        "field" : "priority"
+      }
+    }
+  }
+  
+}
+}}
+
+
+#! 집계 할때 가져오고 싶은 속성 (unit 지정)
+GET report/_search
+{
+      "query": { "match": { "dashboard_id": "bTzq63cBSBqlwJRG-rfu" } },
+      "aggs": {
+        "group_by_category": {
+          "terms": {
+            "field": "category",
+            "order": { "condition": "asc" }
+          },
+
+          "aggs": {
+            "condition": {
+              "min": {
+                "field": "priority"
+              }
+            },
+            "include_source": {
+              "top_hits": {
+                "_source": {
+                  "includes": [
+                    "unit"
+                  ]
+                }
+              }
+            }
+          }
+
+        }
+      }
+    }

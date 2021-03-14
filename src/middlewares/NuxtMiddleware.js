@@ -16,7 +16,9 @@ class NuxtMiddleware extends Middleware {
   async init() {
     const isDev = this.$rapidfire.options.isDev
 
-    this.nuxt = new Nuxt({ telemetry: false, dev: isDev, srcDir: path.join(this.$rapidfire.env.paths.root, 'src/nuxt/') })
+    const nuxtOptions = require(path.join(this.$rapidfire.env.paths.root, 'src/nuxt/nuxt.config.js'))
+
+    this.nuxt = new Nuxt({ ...nuxtOptions, dev: isDev })
 
     await this.nuxt.ready()
 

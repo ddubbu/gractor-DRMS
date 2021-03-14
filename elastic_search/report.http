@@ -1,0 +1,140 @@
+@hostname = http://192.168.1.241
+##http://localhost
+@port = 9200
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@index = report
+
+@dashboard_id = g4QF93cBc6Fh9j6VWKil
+
+#! 전체 찾기 ====================================
+
+###
+GET {{host}}/{{index}}
+
+###
+GET {{host}}/{{index}}/_search
+
+#! 삭제 =========================================
+###
+DELETE {{host}}/{{index}}
+
+###
+POST {{host}}/{{index}}/_delete_by_query
+{
+  "query":{
+    "match": {
+      "_id": "HYoz4ncBqut2V0wOGelD"
+    }
+  }
+}
+
+###
+
+#! index field 생성 =============================
+### 조사중
+PUT {{host}}/{{index}}
+content-Type: {{contentType}}
+
+{
+  "settings": {
+    "number_of_shards" : 5,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "dashboard_id" : { "type" : "keyword" },
+      "category" : { "type" : "keyword" },
+      "unit" : {"type" : "keyword"},
+      "reporter" : {"type" : "text"},
+      "date" : { "type" : "keyword" },
+      "task_code" : { "type"  : "keyword"},
+      "content" : {"type" : "object"},
+      "priority" : {"type" : "integer"}
+    }
+  }
+}
+
+
+
+###
+
+#! doc 추가 ======================================
+POST {{host}}/{{index}}/_doc
+content-Type: {{contentType}}
+
+{
+  "priority" : 1,
+  "dashboard_id" : "ioQq93cBc6Fh9j6VSKjJ",
+  "category" : "보고",
+  "unit" : "건",
+  "reporter" : "이모군",
+  "date" : "2020-02-27",
+  "task_code" : "1-1",
+  "content" : {
+    "title" : "코로나 안전수칙 안내",
+    "description" : "마스크 이스 베스트"
+  }
+}
+
+### 사망자
+POST {{host}}/{{index}}/_doc
+content-Type: {{contentType}}
+
+{
+  "priority" : 3,
+  "dashboard_id" : "ioQq93cBc6Fh9j6VSKjJ",
+  "category" : "사망자",
+  "unit" : "명",
+  "reporter" : "김팀장",
+  "date" : "2015-01-01",
+  "task_code" : "5-2",
+  "content" : {
+    "name" : "김모씨",
+    "gender" : "M",
+    "hospital" : "구리병원",
+    "birth": "1940-01-01"
+  }
+}
+
+### 확진자
+POST {{host}}/{{index}}/_doc
+content-Type: {{contentType}}
+
+{
+  "priority" : 2,
+  "dashboard_id" : "ioQq93cBc6Fh9j6VSKjJ",
+  "category" : "확진자",
+  "unit" : "명",
+  "reporter" : "박인턴",
+  "date" : "2020-01-01",
+  "task_code" : "2-1",
+  "content" : {
+    "name" : "박모군",
+    "gender" : "M",
+    "hospital" : "연세 세브란스 병원",
+    "birth": "1950-07-04"
+  }
+}
+
+### 조사중
+POST {{host}}/{{index}}/_doc
+content-Type: {{contentType}}
+
+{
+  "priority" : 4,
+  "dashboard_id" : "ioQq93cBc6Fh9j6VSKjJ",
+  "category" : "조사중",
+  "unit" : "명",
+  "reporter" : "박인턴",
+  "date" : "2015-01-01T12:10:30Z",
+  "task_code" : "2-1",
+  "content" : {
+    "name" : "김모씨",
+    "gender" : "M",
+    "hospital" : "연세 세브란스 병원",
+    "birth": "1950-07-04"
+  }
+}
+

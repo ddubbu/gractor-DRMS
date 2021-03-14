@@ -1,0 +1,723 @@
+
+
+#! ====================== {{ disaster }} =====================
+#! 전체 찾기
+
+GET /disaster
+GET /disaster/_search
+
+#! index field 생성
+
+PUT /disaster
+{
+  "settings": {
+    "number_of_shards" : 5,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "control_number" : {"type" : "integer"},
+      "type" : { "type" : "keyword" },
+      "name" : { "type" : "keyword" },
+      "response_levels" : { "type" : "object" },
+      "process": { "type" : "keyword" },
+      "task_list" : {"type" : "object"}
+    }
+  }
+}
+
+
+#! doc 추가 
+
+POST /disaster/_doc
+{
+  "control_number" : 1,
+  "type": "nature",
+  "name": "감염병 ",
+  "response_levels": [
+    {
+      "level" : 1,
+      "name" : "징후 감지",
+      "situation": [
+        "○ 해외신종감염병 발생",
+        "○ 국내(타지자체) 신종감염병 확진자 발생"
+        ],
+      "guideline" : [
+        "○ 감시활동(발생동향 모니터링) 강화",
+        "○ 방역대응태세 및 방역 인프라 점검",
+        "* 환자 이송체계, 병상, 보호복, 마스크 등 현황 점검"
+        ],
+      "crisis_alert": ["관심"],
+      "tasks":[
+        {
+          "task_code": "1-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "2-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "2-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "3-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "20-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "47-1",
+          "process_category" : 13
+        }
+      ]
+    },
+    { 
+      "level" : 2,
+      "name" : "초기 대응",
+      "situation": [
+        "○ 지자체 내 신종감염병 확진자 발생"
+        ],
+      "guideline" : [
+        "○ 상황전파(시·도 재난부서, 보건부서, 유관기관 등)",
+        "○ 초기대응반 현장 출동",
+        "- 의심환자 조치(역학조사, 병원이송, 동선 및 접촉자 파악 등)",
+        "- 시 역학조사관 협조 요청(격리병상 확보 등)",
+        "○ 위기 및 위험관리 커뮤니케이션 준비",
+        "- 언론 브리핑",
+        " - 대시민 콜센터 운영"
+        ],
+      "crisis_alert": ["주의"],
+      "tasks":[
+        {
+          "task_code": "4-1",
+          "process_category" : 0
+        },
+        {
+          "task_code": "5-1",
+          "process_category" : 0
+        },
+        {
+          "task_code": "5-2",
+          "process_category" : 0
+        },
+        {
+          "task_code": "7-5",
+          "process_category" : 0
+        },
+        {
+          "task_code": "4-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "4-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "5-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "5-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "6-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "49-1",
+          "process_category" : 1
+        }
+      ]
+    },
+    { 
+      "level" : 3,
+      "name" : "비상 대응",
+      "situation": [
+        "○ 지자체 내 신종감염병 유행"
+        ],
+      "guideline" : [
+        "초기대응 대응지침 유지에 더해",
+        "○ 모든 협조체계 가동",
+        "○ 대응역량 총동원",
+        "○ (필요시) 집단 시설 격리소 확보"
+        ],
+      "crisis_alert": ["경계", "심각"],
+      "tasks":[
+        {
+          "task_code": "4-1",
+          "title": "상황 접수",
+          "process_category" : 0
+        },
+        {
+          "task_code": "5-1",
+          "title": "상황 보고",
+          "process_category" : 1
+        }
+      ]
+    },
+    { 
+      "level" : 4,
+      "name" : "수습 복구",
+      "situation": [
+        "○ 감염병 유행 및 발생 종료"
+        ],
+      "guideline" : [
+        "○ 발생동향 모니터링 유지",
+        "○ 대응 평가",
+        "○ 피해보상 및 지원"
+        ],
+      "crisis_alert": ["관심"]
+    }
+  ],
+  "process" : [
+    "상황실", "긴급생활안정지원", "긴급통신지원", "시설피해의 응급복구", "에너지 공급 피해시설 복구",
+    "재난관리자원지원", "교통대책", "의료 및 방역서비스 지원", "재난현장 환경정비", "자원봉사 지원 및 관리", 
+    "사회질서 유지", "재난지역 수색, 구조 및 구급지원", "재난수습 홍보"
+  ],
+  "task_list": {
+    "1-1": {
+      "title" : "징후 접수",
+      "dept":{
+        "main" : "보건행정과",
+        "support" : "",
+        "collaborate" : ""
+      },
+      "contents": [
+        {
+          "title" : "서구보건소 보건행정과 감염병관리팀수",
+          "content" : [
+            {
+              "type" : "text",
+              "source" : {
+                "1" : "○ 질병관리본부 “주간 감염병 동향”(http://cdc.go.kr)을 통하거나,  또는 질병관리본부의 공문을 통해 해외 신종감염병 발생사실 인지",
+                "2" : "○ 최초 접수 및 파악",
+                "3" : "- 의료기관, 보건소 담당자, 지자체, 검역소, 국제보건기구(WHO, WPRO)",
+                "4" : "○ 접수기관 : 서구보건소 보건행정과 감염병관리팀",
+                "5" : "○ 위기징후포착 및 위기상황을 접수받은 경우, 상황파악 후 동사항을 광주광역시 → 질병관리본부장에게 보고"
+              }
+            },
+            {
+              "type" : "table",
+              "source" :{
+                "sub_title" : "서구보건소 보건행정과 감염병관리팀",
+                "column_name" : ["소속", "전화번호"],
+                "rows" : [
+                   ["OO시 OO구 보건소 보건행정과", "000-000-0000"],
+                   ["OO시 OO구 보건소 보건행정과", "000-000-0000"]
+                 ]
+              }
+            }
+          ]
+        },
+        {
+          "title" : "접수 시 확인사항",
+          "content" : [
+            {
+              "type" : "text",
+              "source" : {
+                "1" : "○ 해외 신종감염병 유행여부 확인",
+                "2" : "○ 국내의 원인불명 감염환자 발생여부 확인"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "2-1":{
+      "title": "징후전파",
+      "dept":{
+        "main" : "보건행정과",
+        "support" : "안전총괄과",
+        "collaborate" : ""
+      },
+      "contents": [
+        {
+          "title" : "전파시간: 72시간 내",
+          "content" : []
+        },
+        {
+          "title" : "전파대상",
+          "content" : [
+            {
+              "type" : "table",
+              "source" :{
+                "sub_title" : "소관부서",
+                "column_name" : ["소속", "성명", "전화번호", "휴대폰번호"],
+                "rows" : [
+                   ["OO시 OO구 안전도시국 안전총괄과", "주OO", "000-000-0000", ""],
+                   ["OO시 OO구 안전도시국 안전총괄과", "주OO", "000-000-0000", ""]
+                 ]
+              }
+            },
+            {
+              "type" : "table",
+              "source" : {
+                "sub_title" : "필요시 유관기관에 전파",
+                "column_name" : ["소속", "전화번호", "팩스번호"],
+                "rows" : [
+                   ["서부경찰서 경비과", "000-000-0000", "000-000-0000", ""],
+                   ["서부소방서 119 재난대응과", "000-000-0000", "000-000-0000", ""],
+                   ["보건환경연구원 감염병조사과", "000-000-0000", "000-000-0000", ""],
+                   ["OO구 의사회 OO구 의사협회", "000-000-0000", "000-000-0000", ""],
+                   ["OO구 약사회 OO구 약사협회", "000-000-0000", "000-000-0000", ""],
+                   ["지역응급의료센터 서광병원", "000-000-0000", "000-000-0000", ""]
+                 ]
+              }
+            }
+          ]
+        },
+        {
+          "title" : "전파내용",
+          "content" : [
+            {
+              "type" : "text",
+              "source" : {
+                "1" : "○ 국내외 발생상황 모니터링 및 동향보고",
+                "2" : "○ 타 시 ‧ 도 감염병 발생 현황",
+                "3" : "○ 해외 감염병 유행현황",
+                "4" : " - 유행국가, 사망인원, 유행양상 등"
+              }
+            }
+          ]
+        },
+        {
+          "title" : "전파방법 : 공문발송",
+          "content" : [
+            {
+              "type" : "text",
+              "source":{
+                "1" : "※ 단, 긴급사항의 경우 선 구두보고 및 관련기관 전파"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "2-2" : {"title":"징후 보고", "depth":{}, "contents":[]},
+    "3-2" : {"title":"긴급대응조치", "depth":{}, "contents":[]},
+    "20-1" : {"title":"방재자원 확보 현황 파악", "depth":{}, "contents":[]},
+    "47-1" : {"title":"언론 모니터링 및 오보 대응", "depth":{}, "contents":[]},
+    "4-1" : {"title":"상황 접수", "depth":{}, "contents":[]},
+    "5-1" : {"title":"상황 보고", "depth":{}, "contents":[]},
+    "5-2" : {"title":"상황 전파", "depth":{}, "contents":[]},
+    "7-5" : {"title":"상황판단회의 개최", "depth":{}, "contents":[]},
+    "4-2" : {"title":"상황 파악", "depth":{}, "contents":[]},
+    "6-1" : {"title":"현장 출동 지시 및 요청", "depth":{}, "contents":[]},
+    "49-1" : {"title":"자가격리 모니터링", "depth":{}, "contents":[]},
+    "47-2" : {"title":"보도자료 작성 및 배포", "depth":{}, "contents":[]},
+    "49-2" : {"title":"접촉자 생활지원", "depth":{}, "contents":[]},
+    "26-2" : {"title":"의료 및 방역 인력, 물품 파악 및 지원", "depth":{}, "contents":[]},
+    "26-3" : {"title":"지자체 의약품, 방역물품 확보 및 운영", "depth":{}, "contents":[]},
+    "34-1" : {"title":"격리자 폐기물 수거봉투 배급", "depth":{}, "contents":[]},
+    "34-17" : {"title":"쓰레기 지원체계 가동", "depth":{}, "contents":[]},
+    "10-4" : {"title":"콜센터 설치 운영", "depth":{}, "contents":[]},
+    "12-2" : {"title":"특별교부세 지원사항 파악", "depth":{}, "contents":[]},
+    "38-1" : {"title":"접촉자관리 지원", "depth":{}, "contents":[]},
+    "40-5" : {"title":"대피명령지시", "depth":{}, "contents":[]},
+    "40-10" : {"title":"안전취약계층의 특성별 대피시 고려사항", "depth":{}, "contents":[]},
+    "40-11" : {"title":"안전취약계층 대피계획 수립 및 대피", "depth":{}, "contents":[]},
+    "50-1" : {"title":"집단시설 격리소 확보", "depth":{}, "contents":[]},
+    "48-1" : {"title":"현장 브리핑 및 취재지원", "depth":{}, "contents":[]},
+    "13-3" : {"title":"임시/합동분향소 설치 운영", "depth":{}, "contents":[]},
+    "13-4" : {"title":"유가족 지원 대책", "depth":{}, "contents":[]},
+    "13-5" : {"title":"장례비 지원", "depth":{}, "contents":[]},
+    "14-2" : {"title":"피해 보상 접수", "depth":{}, "contents":[]},
+    "14-4" : {"title":"피해 보상 지원", "depth":{}, "contents":[]},
+    "21-8" : {"title":"응급복구 수습 예산 지원", "depth":{}, "contents":[]},
+    "41-2" : {"title":"출입통제(Police line)", "depth":{}, "contents":[]},
+    "47-4" : {"title":"브리핑 및 취재지원", "depth":{}, "contents":[]},
+    "26-7" : {"title":"이재민, 피해자 및 유가족 심리치료", "depth":{}, "contents":[]}
+  }
+}
+
+
+
+
+#! 백업본======================================================================================
+
+#! doc 추가 
+
+POST /disaster/_doc
+{
+  "control_number" : 1,
+  "type": "nature",
+  "name": "감염병 ",
+  "response_levels": [
+    {
+      "level" : 1,
+      "name" : "징후 감지",
+      "situation": [
+        "○ 해외신종감염병 발생",
+        "○ 국내(타지자체) 신종감염병 확진자 발생"
+        ],
+      "guideline" : [
+        "○ 감시활동(발생동향 모니터링) 강화",
+        "○ 방역대응태세 및 방역 인프라 점검",
+        "* 환자 이송체계, 병상, 보호복, 마스크 등 현황 점검"
+        ],
+      "crisis_alert": ["관심"],
+      "tasks":[
+        {
+          "task_code": "1-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "2-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "2-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "3-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "20-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "47-1",
+          "process_category" : 13
+        }
+      ]
+    },
+    { 
+      "level" : 2,
+      "name" : "초기 대응",
+      "situation": [
+        "○ 지자체 내 신종감염병 확진자 발생"
+        ],
+      "guideline" : [
+        "○ 상황전파(시·도 재난부서, 보건부서, 유관기관 등)",
+        "○ 초기대응반 현장 출동",
+        "- 의심환자 조치(역학조사, 병원이송, 동선 및 접촉자 파악 등)",
+        "- 시 역학조사관 협조 요청(격리병상 확보 등)",
+        "○ 위기 및 위험관리 커뮤니케이션 준비",
+        "- 언론 브리핑",
+        " - 대시민 콜센터 운영"
+        ],
+      "crisis_alert": ["주의"],
+      "tasks":[
+        {
+          "task_code": "4-1",
+          "process_category" : 0
+        },
+        {
+          "task_code": "5-1",
+          "process_category" : 0
+        },
+        {
+          "task_code": "5-2",
+          "process_category" : 0
+        },
+        {
+          "task_code": "7-5",
+          "process_category" : 0
+        },
+        {
+          "task_code": "4-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "4-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "5-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "5-2",
+          "process_category" : 1
+        },
+        {
+          "task_code": "6-1",
+          "process_category" : 1
+        },
+        {
+          "task_code": "49-1",
+          "process_category" : 1
+        }
+      ]
+    },
+    { 
+      "level" : 3,
+      "name" : "비상 대응",
+      "situation": [
+        "○ 지자체 내 신종감염병 유행"
+        ],
+      "guideline" : [
+        "초기대응 대응지침 유지에 더해",
+        "○ 모든 협조체계 가동",
+        "○ 대응역량 총동원",
+        "○ (필요시) 집단 시설 격리소 확보"
+        ],
+      "crisis_alert": ["경계", "심각"],
+      "tasks":[
+        {
+          "task_code": "4-1",
+          "title": "상황 접수",
+          "process_category" : 0
+        },
+        {
+          "task_code": "5-1",
+          "title": "상황 보고",
+          "process_category" : 1
+        }
+      ]
+    },
+    { 
+      "level" : 4,
+      "name" : "수습 복구",
+      "situation": [
+        "○ 감염병 유행 및 발생 종료"
+        ],
+      "guideline" : [
+        "○ 발생동향 모니터링 유지",
+        "○ 대응 평가",
+        "○ 피해보상 및 지원"
+        ],
+      "crisis_alert": ["관심"]
+    }
+  ],
+  "process" : [
+    "상황실", "긴급생활안정지원", "긴급통신지원", "시설피해의 응급복구", "에너지 공급 피해시설 복구",
+    "재난관리자원지원", "교통대책", "의료 및 방역서비스 지원", "재난현장 환경정비", "자원봉사 지원 및 관리", 
+    "사회질서 유지", "재난지역 수색, 구조 및 구급지원", "재난수습 홍보"
+  ],
+  "tasks": {
+    "1-1": {
+      "title" : "징후 접수",
+      "department":{
+        "main" : "보건행정과",
+        "support" : "",
+        "collaborate" : ""
+      },
+      "contents": [
+        {
+          "title" : "위기상황발생 : 위기상황 접수",
+          "content_type" : "text",
+          "description" : [
+            "○ 질병관리본부 “주간 감염병 동향”(http://cdc.go.kr)을 통하거나,  또는 질병관리본부의 공문을 통해 해외 신종감염병 발생사실 인지",
+            "○ 최초 접수 및 파악",
+            "- 의료기관, 보건소 담당자, 지자체, 검역소, 국제보건기구(WHO, WPRO)",
+            "○ 접수기관 : 서구보건소 보건행정과 감염병관리팀",
+            "○ 위기징후포착 및 위기상황을 접수받은 경우, 상황파악 후 동사항을 광주광역시 → 질병관리본부장에게 보고"
+          ]
+        },
+        {
+          "title" : "서구보건소 보건행정과 감염병관리팀수",
+          "content_type" : "table",
+          "description" : {
+            "th" : ["소속", "전화번호"],
+            "rows" : [
+              ["OO시 OO구 보건소 보건행정과	", "000-000-0000"],
+              ["OO시 OO구 보건소 보건행정과	", "000-000-0000"]
+            ]
+          }
+        },
+        {
+          "title" : "접수 시 확인사항",
+          "content_type" : "text",
+          "description": [
+            "○ 해외 신종감염병 유행여부 확인",
+            "○ 국내의 원인불명 감염환자 발생여부 확인"
+          ]
+        }
+      ]
+    }
+  }
+}
+
+
+
+
+
+
+
+
+#! 삭제 
+
+DELETE /disaster
+
+POST /disaster/_delete_by_query
+{
+  "query":{
+    "match": {
+      "_id": "HYoz4ncBqut2V0wOGelD"
+    }
+  }
+}
+
+#! ====================== {{ task }} =====================
+
+
+#! 전체 찾기
+
+GET /task/_search
+GET /task
+
+#! index field 생성
+
+PUT /task
+{
+  "settings": {
+    "number_of_shards" : 5,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "disaster_control_number" : { "type" : "integer" },
+      "responseLevel" : { "type" : "integer" },
+      "task_code" : { "type" : "keyword" },
+      "progress_category_id": { "type" : "integer" },
+      "title" : { "type" : "text" },
+      "state" : { "type" : "keyword" },
+      
+      
+      "join_field": {
+        "type" : "join",
+        "relations": {
+          "disaster" : "task"
+        }
+      }
+    }
+  }
+}
+
+#! doc 추가 
+POST /task/_doc
+{
+  "disaster_control_number" : 1
+}
+
+
+#! drop index 
+
+DELETE /task
+
+GET /task/_search
+
+
+
+#! 시도중 -- 1 index, 1 table -> multi search by single request
+###
+GET /disaster/_msearch
+
+{ }
+{"query": {"match" : {"control_number": 1} }}
+{ "index" : "dashboard" }
+{"query":{"match" : {"title" : "코로나 19 유행"}}}
+
+###
+
+GET task/_search
+{
+  "query": {
+    "match": {
+      "disaster_control_number": 1
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#! ====================== {{ join 관계 공부 }} =====================
+#! doc 추가 
+
+GET /join_test/_search
+DELETE /join_test
+
+PUT /join_test
+{
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text"
+      },
+      "join_field": { 
+        "type": "join",
+        "relations": {
+          "disaster": "task" 
+        }
+      }
+    }
+  }
+}
+
+POST /join_test/_doc?routing=1
+{
+  "name": "가뭄",
+  "join_field": "disaster"
+}
+
+
+POST /join_test/_doc?routing=1
+{
+  "text" : "hello",
+  "join_field" :{
+    "name" : "task",
+    "parent": "1"
+  }
+}
+
+
+#! 삭제
+POST /join_test/_delete_by_query
+{
+  "query":{
+    "match": {
+      "_id": "H4o_4ncBqut2V0wOYOmB"
+    }
+  }
+}
+
+
+GET join_test/_search
+{
+  "query": {
+    "parent_id": {
+      "type" : "task",
+      "id" : "1"
+    }
+  }
+}
+
+GET join_test/_search
+{
+  "query": {
+    "has_child": {
+      "type": "task",
+      "query":{
+        "match": {"text" : "hello"}
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+

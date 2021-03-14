@@ -1,0 +1,174 @@
+.body {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  /* background-image: url("./tessellation-wallpapers/sky-orange.png"); */
+}
+.mainContainer {
+  /* padding: 10em; */
+  width: 50%;
+  /* margin: 0 auto; */
+  margin-left: 5rem;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  /* background: gray; */
+  margin-top: 4em;
+
+  background: white;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+  color: black; /*font 색 고정*/
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  padding: 5px;
+}
+
+.mainBody {
+  /* border-left: black solid 1px; */
+  height: 100%;
+  padding: 1rem;
+}
+
+.mainBody > div {
+  /* border: 1px solid black; */
+}
+
+.myBoard {
+  border-bottom: 1px solid black;
+  padding-bottom: 20px;
+}
+
+.myBoard,
+.myTask {
+  padding: 1em 1em 3em 1em;
+}
+
+.myBoardList {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+}
+
+a.boardThumbNail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.boardThumbNail {
+  /* border: 1px solid #7890A0; */
+  background-color: #7890a0;
+  /* #86a3b8; */
+  /* #7890A0; */
+  background: linear-gradient(to bottom right, #7e9aad, #4892ca);
+
+  /* rgb(194, 189, 189); */
+  width: 15rem;
+  height: 8rem;
+  border-radius: 10px;
+}
+
+.boardThumbNail:hover {
+  background-color: #87a2b4;
+  /* #a6baca; */
+}
+
+.myTask {
+}
+
+.mainSidebar {
+  padding: 0 3rem 0 0;
+  /* background: rgba(211, 205, 196, 0.74); */
+  width: 15rem;
+}
+
+.createNewBoardButton {
+  width: 100%;
+  height: 2.5rem;
+  font-size: large;
+  cursor: pointer;
+  /* background-color: white; */
+}
+
+.profileHeader {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+}
+
+.profileHeader h2 {
+  /* font-family: 'Caveat', cursive;
+  font-weight: 400;
+  font-size: 30px; */
+}
+
+.mainButton {
+  appearance: none;
+
+  background-color: white;
+  border: none;
+  size: 3rem;
+  outline: none;
+}
+
+.mainButton:hover {
+  cursor: pointer;
+}
+
+.profileEditButton {
+  font-size: 28px;
+}
+
+.pictureDiv {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: '. picture .';
+}
+
+.profilePicuture {
+  grid-area: picture;
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 8rem;
+  height: 8rem;
+  text-align: center;
+}
+
+.myTaskThumbNail {
+  border-bottom: 1px silver dotted;
+
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.myTaskThumbNail > .taskNameDiv > h3 {
+  margin: 0;
+  color: cadetblue;
+  font-size: 1.5rem;
+}
+
+.myTaskThumbNail > .taskEtc {
+  color: gray;
+  font-size: 1.2rem;
+}
+
+.taskDescription {
+  font-size: 1rem;
+  display: block;
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
