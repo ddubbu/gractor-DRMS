@@ -1,100 +1,123 @@
 <template>
   <div>
-    <echarts :options="options" />
-    <!-- <echarts :options="options2" /> -->
+    <p>{{ json }}</p>
+    <p>{{ 'device 개수' + Object.keys(device).length }}</p>
+    <echarts class="chart1" :options="options" />
   </div>
 </template>
 
 <script>
+import io from 'socket.io-client';
+
 export default {
-  data() {
-    return {
-      list: [], //! -> pagination
-      facility_count: [], //! pie graph,
-      options: {},
-      options2: {},
+  mounted() {
+    //! 1. socket 연결
+    this.socket = io.connect('http://192.168.1.91:9001');
+    // this.socket = io.connect('http://localhost:9001');
+
+    this.socket.on('connect', () => {
+      console.log('connect client ----> server');
+    });
+
+    this.socket.on('chat2', (data) => {
+      const json = JSON.parse(data);
+
+      const newSeries = [
+        {
+          ...this.options['series'][0],
+          data: [...this.options['series'][0].data, json.nodes.temp],
+        },
+      ];
+
+      this.options = {
+        ...this.options,
+        series: newSeries,
+      };
+
+      // 출력값 확인을 위해
+      this.json = json;
+      this.device[json.deviceId] = json;
+      // console.log("this.device", this.device);
+    });
+
+    // this.socket.on('disconnect', () => {
+    //   // console.log('this.socket', this.socket);
+    //   this.socket.disconnect();
+    //   console.log('client disconnected!!!!');
+    // });
+
+    this.options = {
+      title: {
+        text: '위험 시설물 관리 - 온도',
+      },
+      //! 이유는 모르겠지만, 이거하면 업데이트안됨.
+      // toolbox: {
+      //   show: true,
+      //   feature: {
+      //     dataZoom: {
+      //       yAxisIndex: 'none',
+      //     },
+      //     // dataView: { readOnly: false },
+      //     // magicType: { type: ['line', 'bar'] },
+      //     restore: {},
+      //     saveAsImage: {},
+      //   },
+      // },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: '{value} °C',
+        },
+      },
+      series: [
+        {
+          data: [], //[150, 230, 224, 218, 135, 147, 260],
+          type: 'line',
+          smooth: true,
+        },
+      ],
     };
   },
-  mounted() {
-    //GET API
-    this.getAirTest(callback.bind(this));
+  data() {
+    return {
+      device: {},
+      json: null,
+      input: '',
+      socket: null,
+      data: [],
 
-    // console.log("this.facility_count", this.facility_count)
+      // chart용
+      options: null,
 
-    function callback() {
-      // based on prepared DOM, initialize echarts instance
-      // var myChart = echarts.init(document.getElementById("main"));
-      // specify chart configuration item and data
-      var option = {
-        tooltip: {
-          trigger: 'item',
-        },
-        title: {
-          text: '양천구 시설 현황 ',
-          textStyle: {
-            // color: "blue",
-          },
-          left: 'center',
-          // padding: 50,
-          // textAlign: 'right',
-        },
-        dataset: {
-          source: this.facility_count,
-        },
-        legend: {
-          show: true,
-          // position: 'center',
-          icon: 'rect',
-          top: 'bottom',
-        },
-        series: [
-          {
-            label: {
-              show: false,
-            },
-            labelLine: {
-              show: false,
-            },
-            type: 'pie',
-            // radius: '20%',
-            radius: ['40%', '70%'],
-            center: ['50%', '50%'],
-          },
-        ],
-      };
-      this.options = option;
-
-      this.options2 = option;
-      // this.
-    }
+      // mqtt 용
+      client: null, // mqtt object
+      message: 'BEFORE',
+      isConnect: false,
+    };
   },
   methods: {
-    async getAirTest(callback) {
-      await this.$axios.get('/api/chart').then(({ data }) => {
-        const {
-          rows,
-          aggregations: {
-            '시설군 요약': { buckets: facility_count },
-          },
-          total,
-        } = data;
-        console.log('rows', rows);
-        console.log('facility_count', facility_count);
-        console.log('total', total);
-
-        // data update
-        const facility_count_list = facility_count.map((ele) => {
-          return [ele.key, ele.doc_count];
-        });
-
-        this.facility_count = [['product', 'count'], ...facility_count_list];
-        console.log('this.facility_count', this.facility_count);
-
-        callback();
-      });
+    submit() {
+      this.data.push(this.input);
+      this.socket.emit('chat', { data: this.input });
     },
   },
+  // componentWillUnmount() {
+  //   this.socket.close(); //.disconnect(true);
+  // },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+.chart1 {
+  margin: 0 auto;
+
+  padding: 100px;
+  /* width: 700px; */
+  height: 700px;
+}
+</style>

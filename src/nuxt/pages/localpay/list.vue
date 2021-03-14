@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import grid from '../../components/grid.vue';
+import grid from '../../components/localpay/grid.vue';
 
 export default {
   components: {

@@ -1,0 +1,35 @@
+const option ={
+  title: {
+    text: '기울기 (X,Y,Z)',
+  },
+
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  },
+  yAxis: {
+    type: 'value',
+  },
+  series: [
+    {
+      type: 'line',
+      smooth: true,
+    },
+    {
+      type: 'line',
+      smooth: true,
+    },
+    {
+      type: 'line',
+      smooth: true,
+    },
+  ],
+  dataset: {
+    source: [
+      ['deviceId', 'degX', 'degY', 'degZ'],
+      ['ABC', 1, 2, 3],
+      ['ABC2', 1, 5, 32],
+    ],
+  },
+},

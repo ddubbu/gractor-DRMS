@@ -1,0 +1,21 @@
+@hostname = http://192.168.1.241
+##http://localhost
+@port = 9200
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@index = guro-facility-device
+
+#! 전체 찾기 ====================================
+
+###
+GET {{host}}/{{index}}
+
+###
+GET {{host}}/{{index}}/_search
+
+
+###
+
+#! 이건 나중에... (save 하는거)
+GET {{host}}/danger-facility/_search

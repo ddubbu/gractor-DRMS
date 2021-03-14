@@ -1,0 +1,41 @@
+@hostname =  http://192.168.1.241
+##http://localhost
+# @hostname = http:nas.gractor.com:9001
+@port = 9200
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@index = drms-user
+@user_id = TYTa9XcBc6Fh9j6Vpaij
+#! 전체 찾기 ====================================
+
+
+###
+GET {{host}}/{{index}}/_search
+
+
+#! 삭제 =========================================
+
+###
+POST {{host}}/{{index}}/_delete_by_query
+content-Type: {{contentType}}
+
+{
+  "query":{
+    "match": {
+      "_id": "MOz-K3gB1i-Jxbkjgd21"
+    }
+  }
+}
+
+#! doc 수정 (객체 일부 가능) =======================================
+###
+POST {{host}}/{{index}}/_update/{{user_id}}
+content-Type: {{contentType}}
+
+{
+  "doc" :{
+    "email" : "test@gmail.com",
+    "password" : "test12345"
+  }
+}

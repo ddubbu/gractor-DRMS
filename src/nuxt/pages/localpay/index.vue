@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import selectTable from '../../components/selectTable.vue';
-import grid from '../../components/grid.vue';
+import selectTable from "../../components/localpay/selectTable.vue";
+import grid from "../../components/localpay/grid.vue";
 export default {
   components: {
     selectTable,
